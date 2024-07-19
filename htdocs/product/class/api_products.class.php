@@ -1793,11 +1793,11 @@ class Products extends DolibarrApi
 	public function addVariantByProductRef($ref, $weight_impact, $price_impact, $price_impact_is_percent, $features)
 	{
 		if (!DolibarrApiAccess::$user->rights->produit->creer) {
-			throw new RestException(401);
+		    throw new RestException(401, 'User does not have permission to create a product.');
 		}
 
 		if (empty($ref) || empty($features) || !is_array($features)) {
-			throw new RestException(401);
+		    throw new RestException(401, 'Reference or features are empty or features is not an array.');
 		}
 
 		$weight_impact = price2num($weight_impact);
@@ -1805,18 +1805,28 @@ class Products extends DolibarrApi
 
 		$prodattr = new ProductAttribute($this->db);
 		$prodattr_val = new ProductAttributeValue($this->db);
-		foreach ($features as $id_attr => $id_value) {
-			if ($prodattr->fetch((int) $id_attr) < 0) {
-				throw new RestException(404);
-			}
-			if ($prodattr_val->fetch((int) $id_value) < 0) {
-				throw new RestException(404);
-			}
+
+		$processedFeatures = array();
+
+		foreach ($features as $feature) {
+		    list($id_attr, $id_value) = array_map('trim', explode('=>', $feature));
+
+		    // throw new RestException(500, 'received id_addr: ' . $id_attr . ' id_value: ' . $id_value . ' from ' . json_encode($feature) . ' from ' . json_encode($features));
+
+		    if ($prodattr->fetch((int) $id_attr) < 0) {
+			throw new RestException(404, 'Product attribute not found with id: ' . $id_attr . ' from ' . json_encode($features));
+		    }
+		    if ($prodattr_val->fetch((int) $id_value) < 0) {
+			throw new RestException(404, 'Product attribute value not found with id: ' . $id_value);
+		    }
+		    $processedFeatures[$id_attr] = $id_value;
 		}
+
+		$features = $processedFeatures;
 
 		$result = $this->product->fetch('', trim($ref));
 		if (!$result) {
-			throw new RestException(404, 'Product not found');
+		    throw new RestException(404, 'Product not found with reference: ' . $ref);
 		}
 
 		$prodcomb = new ProductCombination($this->db);
