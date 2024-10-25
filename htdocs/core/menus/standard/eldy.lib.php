@@ -1207,6 +1207,13 @@ function get_left_menu_home($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu =
 			$newmenu->add("/admin/tools/update.php?mainmenu=home&amp;leftmenu=admintools", $langs->trans("MenuUpgrade"), 1);
 			$newmenu->add("/admin/tools/purge.php?mainmenu=home&amp;leftmenu=admintools", $langs->trans("Purge"), 1);
 
+			/* Already into menu Tools
+			if (isModEnabled('blockedlog')) {
+				$langs->load("blockedlog");
+				$newmenu->add("/blockedlog/admin/blockedlog_list.php?mainmenu=home&amp;leftmenu=admintools", $langs->trans("BrowseBlockedLog"), 1, $user->admin);
+			}
+			*/
+
 			if (isModEnabled('product') || isModEnabled('service')) {
 				$langs->load("products");
 				$newmenu->add("/product/admin/product_tools.php?mainmenu=home&amp;leftmenu=admintools", $langs->trans("ProductVatMassChange"), 1, $user->admin);
