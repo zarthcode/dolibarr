@@ -4274,11 +4274,13 @@ table.liste {
 	border-bottom-right-radius: <?php echo $borderradius; ?>px;
 }
 table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child td:first-child,
-table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child th:first-child {
+table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child th:first-child,
+table.tagtable.liste:not(.paymenttable, .margintable) tr.liste_titre:first-child td:first-child {
 	border-top-left-radius: <?php echo $borderradius; ?>px;
 }
 table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child td:last-child,
-table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child th:last-child {
+table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child th:last-child,
+table.tagtable.liste:not(.paymenttable, .margintable) tr.liste_titre:first-child th:last-child {
 	border-top-right-radius: <?php echo $borderradius; ?>px;
 }
 table.noborder:not(.paymenttable, .margintable) tr:last-child td:first-child,
