@@ -4229,17 +4229,6 @@ table.liste, table.noborder, table.formdoc, div.noborder {
 	border-top-color: var(--colortopbordertitle1);
 	border-top-style: solid;
 	margin: 0px 0px 20px 0px;
-
-	/*border-radius: 2px;
-	width: calc(100% - 7px);
-	border-collapse: separate !important;
-	border-spacing: 0px;
-	border-top-width: 0px;
-	border-top-color: rgb(215,215,215);
-	border-top-style: solid;
-	margin: 0px 0px 5px 2px;
-	box-shadow: 1px 1px 5px #ddd;
-	*/
 }
 #tablelines, #tablelinesservice {
 	border-bottom-width: 1px;
@@ -4266,14 +4255,6 @@ table.noborder.cal_month {
 	border-bottom-left-radius: <?php echo $borderradius; ?>px;
 	border-bottom-right-radius: <?php echo $borderradius; ?>px;
 }
-table.liste:not(.listwithfilterbefore) {
-	border-top-left-radius: <?php echo $borderradius; ?>px;
-	border-top-right-radius: <?php echo $borderradius; ?>px;
-}
-table.liste {
-	border-bottom-left-radius: <?php echo $borderradius; ?>px;
-	border-bottom-right-radius: <?php echo $borderradius; ?>px;
-}
 table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child td:first-child,
 table.noborder:not(.paymenttable, .margintable) tr.liste_titre:first-child th:first-child,
 table.tagtable.liste:not(.paymenttable, .margintable) tr.liste_titre:first-child td:first-child {
@@ -4292,7 +4273,23 @@ table.noborder:not(.paymenttable, .margintable) tr:last-child td:last-child,
 table.noborder:not(.paymenttable, .margintable) tr:last-child th:last-child {
 	border-bottom-right-radius: <?php echo $borderradius; ?>px;
 }
+table.noborder thead tr:last-child td:first-child,
+table.noborder thead tr:last-child th:first-child {
+	border-bottom-left-radius: unset !important;
+}
+table.noborder thead tr:last-child td:last-child,
+table.noborder thead tr:last-child th:last-child {
+	border-bottom-right-radius: unset !important;
+}
 
+table.liste:not(.listwithfilterbefore) {
+	border-top-left-radius: <?php echo $borderradius; ?>px;
+	border-top-right-radius: <?php echo $borderradius; ?>px;
+}
+table.liste {
+	border-bottom-left-radius: <?php echo $borderradius; ?>px;
+	border-bottom-right-radius: <?php echo $borderradius; ?>px;
+}
 table.liste:not(.listwithfilterbefore) tr.liste_titre_filter:first-child td:first-child,
 table.liste:not(.listwithfilterbefore) tr.liste_titre_filter:first-child th:first-child {
 	border-top-left-radius: <?php echo $borderradius; ?>px;
