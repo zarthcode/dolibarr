@@ -4879,7 +4879,7 @@ div.tabBar .noborder {
 	border-bottom: 1px solid var(--colortopbordertitle1) !important;
 }
 #tablelines tr td, #tablelinesservice tr td {
-	height: unset;
+/*	height: unset; */
 }
 
 /* Prepare to remove class pair - impair */

@@ -4985,7 +4985,7 @@ div .tdtop:not(.tagtdnote) {
 	border-bottom: 1px solid #AAA !important;
 }
 #tablelines tr td, #tablelinesservice tr td {
-	height: unset;
+/*	height: unset; */
 }
 
 
