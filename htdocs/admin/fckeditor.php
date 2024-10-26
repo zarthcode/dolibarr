@@ -230,7 +230,7 @@ if (empty($conf->use_javascript_ajax)) {
 	//show_skin(null, 1);
 	//print '<br>'."\n";
 
-	$listofmodes = array('dolibarr_mailings', 'dolibarr_notes', 'dolibarr_details', 'dolibarr_readonly', 'Full', 'Full_inline');
+	$listofmodes = array('dolibarr_readonly', 'dolibarr_details', 'dolibarr_notes', 'dolibarr_mailings', 'Full', 'Full_inline');
 	$linkstomode = '';
 	foreach ($listofmodes as $newmode) {
 		if ($linkstomode) {
