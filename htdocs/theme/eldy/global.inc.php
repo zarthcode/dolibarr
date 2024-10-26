@@ -4807,7 +4807,7 @@ input.liste_titre {
 	line-height: 24px;
 }
 .noborder tr.liste_total td, tr.liste_total td, form.liste_total div, .noborder tr.liste_total_wrap td, tr.liste_total_wrap td, form.liste_total_wrap div {
-	background: var(--colorbacktitle1);
+	<?php if (getDolGlobalString('THEME_ELDY_TOTAL_BACKGROUND_LIKE_HEAD')) { ?>background: var(--colorbacktitle1);<?php } ?>
 	color: var(--listetotal);
 	font-weight: normal;
 }
