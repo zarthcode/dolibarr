@@ -4845,17 +4845,17 @@ class Form
 	}
 
 	/**
-	 *      Return list of transport mode for intracomm report
+	 * Return list of transport mode for intracomm report
 	 *
-	 * @param string $selected Id of the transport mode preselected
-	 * @param string $htmlname Name of the select field
-	 * @param int $format 0=id+label, 1=code+code, 2=code+label, 3=id+code
-	 * @param int $empty 1=can be empty, 0 else
-	 * @param int $noadmininfo 0=Add admin info, 1=Disable admin info
-	 * @param int $maxlength Max length of label
-	 * @param int $active Active or not, -1 = all
-	 * @param string $morecss Add more CSS on select tag
-	 * @return    void
+	 * @param 	string 		$selected 		Id of the transport mode preselected
+	 * @param 	string 		$htmlname 		Name of the select field
+	 * @param 	int 		$format 		0=id+label, 1=code+code, 2=code+label, 3=id+code
+	 * @param 	int 		$empty 			1=can be empty, 0 else
+	 * @param 	int 		$noadmininfo 	0=Add admin info, 1=Disable admin info
+	 * @param 	int 		$maxlength 		Max length of label
+	 * @param 	int 		$active 		Active or not, -1 = all
+	 * @param 	string 		$morecss 		Add more CSS on select tag
+	 * @return  void
 	 */
 	public function selectTransportMode($selected = '', $htmlname = 'transportmode', $format = 0, $empty = 1, $noadmininfo = 0, $maxlength = 0, $active = 1, $morecss = '')
 	{
@@ -4910,6 +4910,9 @@ class Form
 			print '</option>';
 		}
 		print '</select>';
+
+		print ajax_combobox("select".$htmlname);
+
 		if ($user->admin && !$noadmininfo) {
 			print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
 		}
