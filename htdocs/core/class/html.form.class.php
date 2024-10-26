@@ -9694,8 +9694,8 @@ class Form
 					$htmltoenteralink .= '<tr class="liste_titre">';
 					//print '<td>' . $langs->trans("Ref") . '</td>';
 					$htmltoenteralink .= '<td class="center"><input type="text" placeholder="'.dol_escape_htmltag($langs->trans("Ref")).'" name="reftolinkto" value="' . dol_escape_htmltag(GETPOST('reftolinkto', 'alpha')) . '">&nbsp;';
-					$htmltoenteralink .= '<input type="submit" class="button small valignmiddle" value="' . $langs->trans('ToLink') . '">&nbsp;';
-					$htmltoenteralink .= '<input type="submit" class="button small" name="cancel" value="' . $langs->trans('Cancel') . '"></td>';
+					$htmltoenteralink .= '<input type="submit" class="button smallpaddingimp valignmiddle" value="' . $langs->trans('ToLink') . '">&nbsp;';
+					$htmltoenteralink .= '<input type="submit" class="button smallpaddingimp" name="cancel" value="' . $langs->trans('Cancel') . '"></td>';
 					$htmltoenteralink .= '</tr>';
 					$htmltoenteralink .= '</table>';
 					$htmltoenteralink .= '</form>';
@@ -9749,12 +9749,12 @@ class Form
 						$htmltoenteralink .= '</table>';
 						$htmltoenteralink .= '<div class="center">';
 						if ($num) {
-							$htmltoenteralink .= '<input type="submit" class="button valignmiddle marginleftonly marginrightonly small" value="' . $langs->trans('ToLink') . '">';
+							$htmltoenteralink .= '<input type="submit" class="button valignmiddle marginleftonly marginrightonly smallpaddingimp" value="' . $langs->trans('ToLink') . '">';
 						}
 						if (empty($conf->use_javascript_ajax)) {
-							$htmltoenteralink .= '<input type="submit" class="button button-cancel marginleftonly marginrightonly small" name="cancel" value="' . $langs->trans("Cancel") . '"></div>';
+							$htmltoenteralink .= '<input type="submit" class="button button-cancel marginleftonly marginrightonly smallpaddingimp" name="cancel" value="' . $langs->trans("Cancel") . '"></div>';
 						} else {
-							$htmltoenteralink .= '<input type="submit" onclick="jQuery(\'#' . $key . 'list\').toggle(); return false;" class="button button-cancel marginleftonly marginrightonly small" name="cancel" value="' . $langs->trans("Cancel") . '"></div>';
+							$htmltoenteralink .= '<input type="submit" onclick="jQuery(\'#' . $key . 'list\').toggle(); return false;" class="button button-cancel marginleftonly marginrightonly smallpaddingimp" name="cancel" value="' . $langs->trans("Cancel") . '"></div>';
 						}
 						$htmltoenteralink .= '</form>';
 					}
