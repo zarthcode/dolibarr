@@ -8519,7 +8519,16 @@ class Form
 		}
 
 		if (empty($fieldstoshow)) {
-			if (isset($objecttmp->fields['ref'])) {
+			if (!empty($objecttmp->parent_element)) {
+				$fieldstoshow = 'o.ref';
+				if (empty($sortfield)) {
+					$sortfield = 'o.ref';
+				}
+				if (in_array($objecttmp->element, ['commandedet', 'propaldet', 'facturedet', 'expeditiondet'])) {
+					$fieldstoshow .= ',p.ref AS p_ref,p.label,t.description';
+					$sortfield .= ', p.ref';
+				}
+			} elseif (isset($objecttmp->fields['ref'])) {
 				$fieldstoshow = 't.ref';
 			} else {
 				$langs->load("errors");
@@ -8535,14 +8544,21 @@ class Form
 		$num = 0;
 
 		// Search data
-		$sql = "SELECT t.rowid, " . $fieldstoshow . " FROM " . $this->db->prefix() . $objecttmp->table_element . " as t";
+		$sql = "SELECT t.rowid, " . $fieldstoshow . " FROM " . $this->db->prefix() . $this->db->sanitize($objecttmp->table_element) . " as t";
 		if (!empty($objecttmp->isextrafieldmanaged)) {
-			$sql .= " LEFT JOIN " . $this->db->prefix() . $objecttmp->table_element . "_extrafields as e ON t.rowid=e.fk_object";
+			$sql .= " LEFT JOIN " . $this->db->prefix() . $this->db->sanitize($objecttmp->table_element) . "_extrafields as e ON t.rowid = e.fk_object";
+		}
+		if (!empty($objecttmp->parent_element)) {
+			$parent_properties = getElementProperties($objecttmp->parent_element);
+			$sql .= " INNER JOIN " . $this->db->prefix() . $this->db->sanitize($parent_properties['table_element']) . " as o ON o.rowid = t.".$objecttmp->fk_parent_attribute;
+		}
+		if (in_array($objecttmp->parent_element, ['commande', 'propal', 'facture', 'expedition'])) {
+			$sql .= " LEFT JOIN " . $this->db->prefix() . "product as p ON p.rowid = t.fk_product";
 		}
 		if (isset($objecttmp->ismultientitymanaged)) {
 			if (!is_numeric($objecttmp->ismultientitymanaged)) {
 				$tmparray = explode('@', $objecttmp->ismultientitymanaged);
-				$sql .= " INNER JOIN " . $this->db->prefix() . $tmparray[1] . " as parenttable ON parenttable.rowid = t." . $tmparray[0];
+				$sql .= " INNER JOIN " . $this->db->prefix() . $this->db->sanitize($tmparray[1]) . " as parenttable ON parenttable.rowid = t." . $this->db->sanitize($tmparray[0]);
 			}
 			if ($objecttmp->ismultientitymanaged === 'fk_soc@societe') {
 				if (!$user->hasRight('societe', 'client', 'voir')) {
@@ -8569,7 +8585,7 @@ class Form
 					$sql .= " AND t.entity IN (" . getEntity($objecttmp->table_element) . ")";
 				}
 				if (!is_numeric($objecttmp->ismultientitymanaged)) {
-					$sql .= " AND parenttable.entity = t." . $tmparray[0];
+					$sql .= " AND parenttable.entity = t." . $this->db->sanitize($tmparray[0]);
 				}
 				if ($objecttmp->ismultientitymanaged == 1 && !empty($user->socid)) {
 					if ($objecttmp->element == 'societe') {
@@ -8584,8 +8600,14 @@ class Form
 					}
 				}
 			}
+			$splittedfieldstoshow = explode(',', $fieldstoshow);
+			foreach ($splittedfieldstoshow as &$field2) {
+				if (is_numeric($pos=strpos($field2, ' '))) {
+					$field2 = substr($field2, 0, $pos);
+				}
+			}
 			if ($searchkey != '') {
-				$sql .= natural_search(explode(',', $fieldstoshow), $searchkey);
+				$sql .= natural_search($splittedfieldstoshow, $searchkey);
 			}
 
 			if ($filter) {     // Syntax example "(t.ref:like:'SO-%') and (t.date_creation:<:'20160101')"
@@ -8631,7 +8653,7 @@ class Form
 					$tmparray = explode(',', $fieldstoshow);
 					$oldvalueforshowoncombobox = 0;
 					foreach ($tmparray as $key => $val) {
-						$val = preg_replace('/t\./', '', $val);
+						$val = preg_replace('/(t|p|o)\./', '', $val);
 						$label .= (($label && $obj->$val) ? ($oldvalueforshowoncombobox != $objecttmp->fields[$val]['showoncombobox'] ? ' - ' : ' ') : '');
 						$labelhtml .= (($label && $obj->$val) ? ($oldvalueforshowoncombobox != $objecttmp->fields[$val]['showoncombobox'] ? ' - ' : ' ') : '');
 						$label .= $obj->$val;
