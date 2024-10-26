@@ -4165,7 +4165,11 @@ if ($action == 'create') {
 					$somethingshown = $formfile->numoffiles;
 
 					// Show links to link elements
-					$linktoelem = $form->showLinkToObjectBlock($object, array(), array('invoice_supplier'));
+					$tmparray = $form->showLinkToObjectBlock($object, array(), array('invoice_supplier'), 1);
+					$linktoelem = $tmparray['linktoelem'];
+					$htmltoenteralink = $tmparray['htmltoenteralink'];
+					print $htmltoenteralink;
+
 					$somethingshown = $form->showLinkedObjectBlock($object, $linktoelem);
 
 					print '</div><div class="fichehalfright">';

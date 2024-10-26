@@ -9686,12 +9686,12 @@ class Form
 					$htmltoenteralink .= '<br>'."\n";
 					$htmltoenteralink .= '<!-- form to add a link from anywhere -->'."\n";
 					$htmltoenteralink .= '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST" name="formlinkedbyref' . $key . '">';
-					$htmltoenteralink .= '<input type="hidden" name="id" value="' . $object->id . '">';
-					$htmltoenteralink .= '<input type="hidden" name="action" value="addlinkbyref">';
 					$htmltoenteralink .= '<input type="hidden" name="token" value="' . newToken() . '">';
+					$htmltoenteralink .= '<input type="hidden" name="action" value="addlinkbyref">';
+					$htmltoenteralink .= '<input type="hidden" name="id" value="' . $object->id . '">';
 					$htmltoenteralink .= '<input type="hidden" name="addlink" value="' . $key . '">';
 					$htmltoenteralink .= '<table class="noborder">';
-					$htmltoenteralink .= '<tr>';
+					$htmltoenteralink .= '<tr class="liste_titre">';
 					//print '<td>' . $langs->trans("Ref") . '</td>';
 					$htmltoenteralink .= '<td class="center"><input type="text" placeholder="'.dol_escape_htmltag($langs->trans("Ref")).'" name="reftolinkto" value="' . dol_escape_htmltag(GETPOST('reftolinkto', 'alpha')) . '">&nbsp;';
 					$htmltoenteralink .= '<input type="submit" class="button small valignmiddle" value="' . $langs->trans('ToLink') . '">&nbsp;';
@@ -9710,11 +9710,13 @@ class Form
 
 					if ($num > 0) {
 						// Section for free predefined list
-						$htmltoenteralink .= '<br>';
+						if (getDolGlobalString('MAIN_HIDE_LINK_BY_REF_IN_LINKTO')) {
+							$htmltoenteralink .= '<br>';
+						}
 						$htmltoenteralink .= '<!-- form to add a link from object to same thirdparty -->'."\n";
 						$htmltoenteralink .= '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST" name="formlinked' . $key . '">';
-						$htmltoenteralink .= '<input type="hidden" name="action" value="addlink">';
 						$htmltoenteralink .= '<input type="hidden" name="token" value="' . newToken() . '">';
+						$htmltoenteralink .= '<input type="hidden" name="action" value="addlink">';
 						$htmltoenteralink .= '<input type="hidden" name="id" value="' . $object->id . '">';
 						$htmltoenteralink .= '<input type="hidden" name="addlink" value="' . $key . '">';
 						$htmltoenteralink .= '<table class="noborder">';

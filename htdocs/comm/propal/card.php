@@ -3240,7 +3240,10 @@ if ($action == 'create') {
 		print $formfile->showdocuments('propal', $objref, $filedir, $urlsource, $genallowed, $delallowed, $object->model_pdf, 1, 0, 0, 28, 0, '', 0, '', $soc->default_lang, '', $object);
 
 		// Show links to link elements
-		$linktoelem = $form->showLinkToObjectBlock($object, array(), array('propal'));
+		$tmparray = $form->showLinkToObjectBlock($object, array(), array('propal'), 1);
+		$linktoelem = $tmparray['linktoelem'];
+		$htmltoenteralink = $tmparray['htmltoenteralink'];
+		print $htmltoenteralink;
 
 		$compatibleImportElementsList = false;
 		if ($user->hasRight('propal', 'creer') && $object->statut == Propal::STATUS_DRAFT) {

@@ -6098,7 +6098,10 @@ if ($action == 'create') {
 		$somethingshown = $formfile->numoffiles;
 
 		// Show links to link elements
-		$linktoelem = $form->showLinkToObjectBlock($object, array(), array('invoice'));
+		$tmparray = $form->showLinkToObjectBlock($object, array(), array('invoice'), 1);
+		$linktoelem = $tmparray['linktoelem'];
+		$htmltoenteralink = $tmparray['htmltoenteralink'];
+		print $htmltoenteralink;
 
 		$compatibleImportElementsList = false;
 		if ($usercancreate
