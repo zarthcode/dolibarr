@@ -579,7 +579,7 @@ a.vmenu span, span.vmenu, span.vmenu span {
 	border-radius: 5px;
 }
 .kanban .box-flex-item {
-	line-height: 1.4em;
+	line-height: 1.2em;
 }
 
 /* css for small kanban */
