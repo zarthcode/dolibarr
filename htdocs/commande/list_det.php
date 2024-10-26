@@ -2193,7 +2193,11 @@ if ($resql) {
 
 		// Billed
 		if (!empty($arrayfields['c.facture']['checked'])) {
-			print '<td class="center">'.yn($obj->billed).'</td>';
+			print '<td class="center">';
+			if ($obj->billed) {
+				print yn($obj->billed, $langs->trans("Billed"));
+			}
+			print '</td>';
 			if (!$i) {
 				$totalarray['nbfield']++;
 			}
