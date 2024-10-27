@@ -5432,10 +5432,15 @@ div.fiche > table.table-fiche-title:first-of-type div {
 	/* text-transform: uppercase; */
 	/* font-weight: 600; */
 }
-
 div.titre {
 	color: var(--colortexttitlenotab);
 }
+/*
+div.subtitle {
+
+}
+*/
+
 .secondary {
 	color: var(--colortexttitlenotab);
 }
