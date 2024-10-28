@@ -41,6 +41,7 @@ if ($size > 10000) {
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
 '
+@phan-var-force string $captcha
 @phan-var-force string $captcha_refresh
 @phan-var-force int<0,1> $dol_hide_leftmenu
 @phan-var-force int<0,1> $dol_hide_topmenu
@@ -278,7 +279,22 @@ if (!empty($captcha)) {
 	} else {
 		$php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog');
 	}
-	// TODO: provide accessible captcha variants?>
+
+	$classfile = DOL_DOCUMENT_ROOT."/core/modules/security/captcha/modCaptcha".ucfirst($captcha).'.class.php';
+	include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+	$captchaobj = null;
+	if (dol_is_file($classfile)) {
+		// Charging the numbering class
+		$classname = "modCaptcha".ucfirst($captcha);
+		require_once $classfile;
+
+		$captchaobj = new $classname($db, $conf, $langs, $user);
+	}
+
+	if (is_object($captchaobj) && method_exists($captchaobj, 'getCaptchaCodeForForm')) {
+		// TODO: get this code using a method of captcha
+	} else {
+		?>
 	<!-- Captcha -->
 	<div class="trinputlogin">
 	<div class="tagtd none valignmiddle tdinputlogin nowrap">
@@ -293,7 +309,8 @@ if (!empty($captcha)) {
 	</span>
 
 	</div></div>
-	<?php
+		<?php
+	}
 }
 
 if (!empty($morelogincontent)) {

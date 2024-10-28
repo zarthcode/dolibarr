@@ -1,6 +1,6 @@
 <?php
-/* Copyright (C) 2022 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2022 	Laurent Destailleur 	<eldy@users.sourceforge.net>
+ * Copyright (C) 2024	Frédéric France			<frederic.france@free.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -205,7 +205,22 @@ if (!empty($captcha)) {
 	} else {
 		$php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog');
 	}
-	// TODO: provide accessible captcha variants?>
+
+	$classfile = DOL_DOCUMENT_ROOT."/core/modules/security/captcha/modCaptcha".ucfirst($captcha).'.class.php';
+	include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+	$captchaobj = null;
+	if (dol_is_file($classfile)) {
+		// Charging the numbering class
+		$classname = "modCaptcha".ucfirst($captcha);
+		require_once $classfile;
+
+		$captchaobj = new $classname($db, $conf, $langs, $user);
+	}
+
+	if (is_object($captchaobj) && method_exists($captchaobj, 'getCaptchaCodeForForm')) {
+		// TODO: get this code using a method of captcha
+	} else {
+		?>
 	<!-- Captcha -->
 	<div class="trinputlogin">
 	<div class="tagtd tdinputlogin nowrap none valignmiddle">
@@ -220,7 +235,8 @@ if (!empty($captcha)) {
 	</span>
 
 	</div></div>
-	<?php
+		<?php
+	}
 }
 
 if (!empty($morelogincontent)) {

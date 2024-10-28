@@ -1,6 +1,6 @@
 <?php
-/* Copyright (C) 2009-2010  Regis Houssin <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2013  Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2009-2010  Regis Houssin 			<regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2024  Laurent Destailleur 	<eldy@users.sourceforge.net>
  * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+// Page to ask email for password forgotten
 
 if (!defined('NOBROWSERNOTIF')) {
 	define('NOBROWSERNOTIF', 1);
@@ -164,7 +166,22 @@ if (!empty($captcha)) {
 	} else {
 		$php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog');
 	}
-	// TODO: provide accessible captcha variants?>
+
+	$classfile = DOL_DOCUMENT_ROOT."/core/modules/security/captcha/modCaptcha".ucfirst($captcha).'.class.php';
+	include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+	$captchaobj = null;
+	if (dol_is_file($classfile)) {
+		// Charging the numbering class
+		$classname = "modCaptcha".ucfirst($captcha);
+		require_once $classfile;
+
+		$captchaobj = new $classname($db, $conf, $langs, $user);
+	}
+
+	if (is_object($captchaobj) && method_exists($captchaobj, 'getCaptchaCodeForForm')) {
+		// TODO: get this code using a method of captcha
+	} else {
+		?>
 	<!-- Captcha -->
 	<div class="trinputlogin">
 	<div class="tagtd tdinputlogin nowrap none valignmiddle">
@@ -179,7 +196,8 @@ if (!empty($captcha)) {
 	</span>
 
 	</div></div>
-	<?php
+		<?php
+	}
 }
 
 if (!empty($morelogincontent)) {
