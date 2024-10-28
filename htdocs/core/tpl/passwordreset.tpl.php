@@ -196,7 +196,6 @@ if (!empty($disablenofollow)) {
 
 
 <?php
-$captcha = 0;
 if (!empty($captcha)) {
 	// Add a variable param to force not using cache (jmobile)
 	$php_self = preg_replace('/[&\?]time=(\d+)/', '', $php_self); // Remove param time
@@ -231,10 +230,11 @@ if (!empty($captcha)) {
 	</span>
 	<span class="nowrap inline-block">
 	<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
-	<a class="inline-block valignmiddle" href="<?php echo $php_self; ?>" tabindex="4"><?php echo $captcha_refresh; ?></a>
+	<a class="inline-block valignmiddle" href="<?php echo $php_self; ?>" tabindex="4"><?php echo img_picto($langs->trans("Refresh"), 'refresh', 'id="captcha_refresh_img"'); ?></a>
 	</span>
 
-	</div></div>
+	</div>
+	</div>
 		<?php
 	}
 }

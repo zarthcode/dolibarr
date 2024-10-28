@@ -42,7 +42,6 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
 '
 @phan-var-force string $captcha
-@phan-var-force string $captcha_refresh
 @phan-var-force int<0,1> $dol_hide_leftmenu
 @phan-var-force int<0,1> $dol_hide_topmenu
 @phan-var-force int<0,1> $dol_no_mouse_hover
@@ -305,10 +304,11 @@ if (!empty($captcha)) {
 	</span>
 	<span class="nowrap inline-block">
 	<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
-	<a class="inline-block valignmiddle" href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
+	<a class="inline-block valignmiddle" href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo img_picto($langs->trans("Refresh"), 'refresh', 'id="captcha_refresh_img"'); ?></a>
 	</span>
 
-	</div></div>
+	</div>
+	</div>
 		<?php
 	}
 }

@@ -271,13 +271,9 @@ if (!function_exists('dol_loginfunction')) {
 		}
 
 		// Security graphical code
-		$captcha = 0;
-		$captcha_refresh = '';
+		$captcha = '';
 		if (getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA')) {
 			$captcha = getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA_HANDLER', 'standard');
-			if ($captcha == 'standard') {
-				$captcha_refresh = img_picto($langs->trans("Refresh"), 'refresh', 'id="captcha_refresh_img"');
-			}
 		}
 
 		// Extra link
