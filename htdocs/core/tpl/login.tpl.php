@@ -1,6 +1,6 @@
 <?php
-/* Copyright (C) 2009-2015 Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2022 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2009-2015 	Regis Houssin       <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2022 	Laurent Destailleur <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,6 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 @phan-var-force int<0,1> $dol_optimize_smallscreen
 @phan-var-force int<0,1> $dol_use_jmobile
 @phan-var-force string $focus_element
-@phan-var-force string $helpcenterlink
 @phan-var-force string $login
 @phan-var-force string $main_authentication
 @phan-var-force string $main_home
@@ -58,7 +57,6 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 @phan-var-force string $urllogo
 
 @phan-var-force int<0,1> $forgetpasslink
-@phan-var-force int<0,1> $helpcenterlink
 ';
 
 
@@ -150,6 +148,7 @@ if (getDolGlobalInt('MAIN_MODULE_OPENIDCONNECT', 0) > 0 && isset($conf->file->ma
 
 top_htmlhead('', $titleofloginpage, 0, 0, $arrayofjs, array(), 1, $disablenofollow);
 
+$helpcenterlink = getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE');
 
 $colorbackhmenu1 = '60,70,100'; // topmenu
 if (!isset($conf->global->THEME_ELDY_TOPMENU_BACK1)) {
@@ -369,11 +368,7 @@ if ($forgetpasslink || $helpcenterlink) {
 	}
 
 	if ($helpcenterlink) {
-		$url = DOL_URL_ROOT.'/support/index.php'.$moreparam;
-		if (getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE')) {
-			$url = getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE');
-		}
-		echo '<a class="alogin" href="'.dol_escape_htmltag($url).'" target="_blank" rel="noopener noreferrer">';
+		echo '<a class="alogin" href="'.dol_escape_htmltag($helpcenterlink).'" target="_blank" rel="noopener noreferrer">';
 		echo $langs->trans('NeedHelpCenter');
 		echo '</a>';
 	}

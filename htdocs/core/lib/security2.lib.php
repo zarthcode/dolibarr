@@ -281,12 +281,12 @@ if (!function_exists('dol_loginfunction')) {
 		// Extra link
 		$forgetpasslink = 0;
 		$helpcenterlink = 0;
-		if (!getDolGlobalString('MAIN_SECURITY_DISABLEFORGETPASSLINK') || !getDolGlobalString('MAIN_HELPCENTER_DISABLELINK')) {
+		if (!getDolGlobalString('MAIN_SECURITY_DISABLEFORGETPASSLINK') || getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE')) {
 			if (!getDolGlobalString('MAIN_SECURITY_DISABLEFORGETPASSLINK')) {
 				$forgetpasslink = 1;
 			}
 
-			if (!getDolGlobalString('MAIN_HELPCENTER_DISABLELINK')) {
+			if (getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE')) {
 				$helpcenterlink = 1;
 			}
 		}
