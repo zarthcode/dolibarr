@@ -1004,7 +1004,6 @@ VideoGeneration
 #####################################################################
 #####################################################################
 AddService
-AnHelpMessage
 Analytic
 AnalyticLabel
 BankId
@@ -1036,6 +1035,7 @@ FailedToLogin
 First
 GroupCreate
 GroupUpdate
+HelpMessage
 INVOICE_RETAINED_WARRANTY_LIMITED_TO_FINAL_SITUATION
 INVOICE_RETAINED_WARRANTY_LIMITED_TO_SITUATION
 INVOICE_SITUATION_DEFAULT_RETAINED_WARRANTY_COND_ID
