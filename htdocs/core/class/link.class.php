@@ -192,7 +192,7 @@ class Link extends CommonObject
 		$this->db->begin();
 
 		$sql  = "UPDATE ".$this->db->prefix()."links SET ";
-		$sql .= "entity = ".$conf->entity;
+		$sql .= "entity = ".((int) $conf->entity);
 		$sql .= ", datea = '".$this->db->idate(dol_now())."'";
 		$sql .= ", url = '".$this->db->escape($this->url)."'";
 		$sql .= ", label = '".$this->db->escape($this->label)."'";
