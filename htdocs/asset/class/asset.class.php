@@ -1113,6 +1113,11 @@ class Asset extends CommonObject
 							$nb_days = min($nb_days_in_year, num_between_day($begin_date, $end_date, 1));
 							$depreciation_ht = (float) price2num($period_amount * $nb_days / $nb_days_in_year, 'MT');
 						}
+						if (getDolGlobalInt('ASSET_ROUND_INTEGER_NUMBER_UPWARDS') == 1) {
+							if ($idx_loop < $max_loop) { // avoid last depreciation value
+								$depreciation_ht = ceil($depreciation_ht);
+							}
+						}
 
 						if ($fiscal_period_start <= $depreciation_date_end && $depreciation_date_end <= $fiscal_period_end) { // last period
 							$depreciation_ht = (float) price2num($depreciation_amount - (float) $cumulative_depreciation_ht, 'MT');
