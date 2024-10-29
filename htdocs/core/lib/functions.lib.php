@@ -435,6 +435,9 @@ function getEntity($element, $shared = 1, $currentobject = null)
 	} else {
 		$out = '';
 		$addzero = array('user', 'usergroup', 'cronjob', 'c_email_templates', 'email_template', 'default_values', 'overwrite_trans');
+		if (getDolGlobalString('HOLIDAY_ALLOW_ZERO_IN_DIC')) {
+			$addzero[] = 'c_holiday_types';
+		}
 		if (in_array($element, $addzero)) {
 			$out .= '0,';
 		}
