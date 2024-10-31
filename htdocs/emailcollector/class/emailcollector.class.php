@@ -1307,6 +1307,8 @@ class EmailCollector extends CommonObject
 
 			try {
 				$client->connect();
+
+				$connection = true;
 			} catch (ConnectionFailedException $e) {
 				$this->error = $e->getMessage();
 				$this->errors[] = $this->error;
