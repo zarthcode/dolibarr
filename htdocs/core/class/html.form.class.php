@@ -2570,7 +2570,7 @@ class Form
 			$resourcestatic->fetch($value['id']);
 			$out .= $resourcestatic->getNomUrl(-1);
 			if ($nbassignetoresource >= 1 && $action != 'view') {
-				$out .= ' <input type="image" style="border: 0px;" src="' . img_picto($langs->trans("Remove"), 'delete', '', 0, 1) . '" value="' . $resourcestatic->id . '" class="removedassigned reposition" id="removedassignedresource_' . $resourcestatic->id . '" name="removedassignedresource_' . $resourcestatic->id . '">';
+				$out .= ' <input type="image" style="border: 0px;" src="' . img_picto($langs->trans("Remove"), 'delete', '', 0, 1) . '" value="' . $resourcestatic->id . '" class="removedassignedresource reposition" id="removedassignedresource_' . $resourcestatic->id . '" name="removedassignedresource_' . $resourcestatic->id . '">';
 			}
 			// Show my availability
 			if ($showproperties) {
@@ -2592,7 +2592,7 @@ class Form
 
 		// Method with no ajax
 		if ($action != 'view') {
-			$out .= '<input type="hidden" class="removedassignedhidden" name="removedassignedresource" value="">';
+			$out .= '<input type="hidden" class="removedassignedresourcehidden" name="removedassignedresource" value="">';
 			$out .= '<script nonce="' . getNonce() . '" type="text/javascript">jQuery(document).ready(function () {';
 			$out .= 'jQuery(".removedassignedresource").click(function() { jQuery(".removedassignedresourcehidden").val(jQuery(this).val()); });';
 			$out .= 'jQuery(".assignedtoresource").change(function() { console.log(jQuery(".assignedtoresource option:selected").val());';
