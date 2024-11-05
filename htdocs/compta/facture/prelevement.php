@@ -914,8 +914,8 @@ if ($object->id > 0) {
 	print '<td class="left">'.$langs->trans("DateRequest").'</td>';
 	print '<td>'.$langs->trans("User").'</td>';
 	print '<td class="center">'.$langs->trans("Amount").'</td>';
-	print '<td class="center">'.$langs->trans("DateProcess").'</td>';
 	print '<td class="center">'.$langs->trans("IBAN").'</td>';
+	print '<td class="center">'.$langs->trans("DateProcess").'</td>';
 	if ($type == 'bank-transfer') {
 		print '<td class="">'.$langs->trans("BankTransferReceipt").'</td>';
 	} else {
@@ -989,9 +989,6 @@ if ($object->id > 0) {
 			// Amount
 			print '<td class="center"><span class="amount">'.price($obj->amount).'</span></td>';
 
-			// Date process
-			print '<td class="center"><span class="opacitymedium">'.$langs->trans("OrderWaiting").'</span></td>';
-
 			// Iban
 			print '<td class="center"><span class="iban">';
 			print $obj->iban;
@@ -1000,6 +997,9 @@ if ($object->id > 0) {
 			}
 			print $obj->bic;
 			print '</span></td>';
+
+			// Date process
+			print '<td class="center"><span class="opacitymedium">'.$langs->trans("OrderWaiting").'</span></td>';
 
 			// Link to make payment now
 			print '<td class="minwidth75">';
@@ -1037,8 +1037,10 @@ if ($object->id > 0) {
 			}
 			print '</td>';
 
-			//
-			print '<td class="center">-</td>';
+			// Withraw ref
+			print '<td class="">';
+			//print '<span class="opacitymedium">'.$langs->trans("OrderWaiting").'</span>';
+			print '</td>';
 
 			// Action column
 			if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
@@ -1116,9 +1118,6 @@ if ($object->id > 0) {
 			// Amount
 			print '<td class="center"><span class="amount">'.price($obj->amount).'</span></td>';
 
-			// Date process
-			print '<td class="center nowraponall">'.dol_print_date($db->jdate($obj->date_traite), 'dayhour', 'tzuserrel')."</td>\n";
-
 			// Iban
 			print '<td class="center"><span class="iban">';
 			print $obj->iban;
@@ -1127,6 +1126,9 @@ if ($object->id > 0) {
 			}
 			print $obj->bic;
 			print '</span></td>';
+
+			// Date process
+			print '<td class="center nowraponall">'.dol_print_date($db->jdate($obj->date_traite), 'dayhour', 'tzuserrel')."</td>\n";
 
 			// Link to payment request done
 			print '<td class="minwidth75">';
