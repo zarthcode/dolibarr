@@ -630,43 +630,60 @@ if ($object->id > 0) {
 	print '</div>';
 
 	print '<div class="fichehalfright">';
-	print '<div class="underbanner clearboth"></div>';
+	print '<!-- amounts -->'."\n";
+	print '<div class="underbanner clearboth"></div>'."\n";
 
-	print '<table class="border centpercent tableforfield">';
+	print '<table class="border tableforfield centpercent">';
 
-	if (isModEnabled('multicurrency') && ($object->multicurrency_code != $conf->currency)) {
-		// Multicurrency Amount HT
-		print '<tr><td class="titlefieldmiddle">'.$form->editfieldkey('MulticurrencyAmountHT', 'multicurrency_total_ht', '', $object, 0).'</td>';
-		print '<td class="nowrap">'.price($object->multicurrency_total_ht, 0, $langs, 0, - 1, - 1, (!empty($object->multicurrency_code) ? $object->multicurrency_code : $conf->currency)).'</td>';
-		print '</tr>';
+	include DOL_DOCUMENT_ROOT.'/core/tpl/object_currency_amount.tpl.php';
 
-		// Multicurrency Amount VAT
-		print '<tr><td>'.$form->editfieldkey('MulticurrencyAmountVAT', 'multicurrency_total_tva', '', $object, 0).'</td>';
-		print '<td class="nowrap">'.price($object->multicurrency_total_tva, 0, $langs, 0, - 1, - 1, (!empty($object->multicurrency_code) ? $object->multicurrency_code : $conf->currency)).'</td>';
-		print '</tr>';
-
-		// Multicurrency Amount TTC
-		print '<tr><td>'.$form->editfieldkey('MulticurrencyAmountTTC', 'multicurrency_total_ttc', '', $object, 0).'</td>';
-		print '<td class="nowrap">'.price($object->multicurrency_total_ttc, 0, $langs, 0, - 1, - 1, (!empty($object->multicurrency_code) ? $object->multicurrency_code : $conf->currency)).'</td>';
-		print '</tr>';
+	$sign = 1;
+	if (getDolGlobalString('INVOICE_POSITIVE_CREDIT_NOTE_SCREEN') && $object->type == $object::TYPE_CREDIT_NOTE) {
+		$sign = -1; // We invert sign for output
 	}
+	print '<tr>';
+	// Amount HT
+	print '<td class="titlefieldmiddle">' . $langs->trans('AmountHT') . '</td>';
+	print '<td class="nowrap amountcard right">' . price($sign * $object->total_ht, 0, $langs, 0, -1, -1, $conf->currency) . '</td>';
+	if (isModEnabled("multicurrency") && ($object->multicurrency_code && $object->multicurrency_code != $conf->currency)) {
+		// Multicurrency Amount HT
+		print '<td class="nowrap amountcard right">' . price($sign * $object->multicurrency_total_ht, 0, $langs, 0, -1, -1, $object->multicurrency_code) . '</td>';
+	}
+	print '</tr>';
 
-	// Amount
-	print '<tr><td class="titlefield">'.$langs->trans('AmountHT').'</td>';
-	print '<td class="nowrap right">'.price($object->total_ht, 1, '', 1, - 1, - 1, $conf->currency).'</td></tr>';
-
-	// Vat
-	print '<tr><td>'.$langs->trans('AmountVAT').'</td><td class="nowrap right">'.price($object->total_tva, 1, '', 1, - 1, - 1, $conf->currency).'</td></tr>';
+	print '<tr>';
+	// Amount VAT
+	print '<td>' . $langs->trans('AmountVAT') . '</td>';
+	print '<td class="nowrap amountcard right">' . price($sign * $object->total_tva, 0, $langs, 0, -1, -1, $conf->currency) . '</td>';
+	if (isModEnabled("multicurrency") && ($object->multicurrency_code && $object->multicurrency_code != $conf->currency)) {
+		// Multicurrency Amount VAT
+		print '<td class="nowrap amountcard right">' . price($sign * $object->multicurrency_total_tva, 0, $langs, 0, -1, -1, $object->multicurrency_code) . '</td>';
+	}
 	print '</tr>';
 
 	// Amount Local Taxes
-	if (($mysoc->localtax1_assuj == "1" && $mysoc->useLocalTax(1)) || $object->total_localtax1 != 0) { 	// Localtax1
-		print '<tr><td>'.$langs->transcountry("AmountLT1", $mysoc->country_code).'</td>';
-		print '<td class="nowrap right">'.price($object->total_localtax1, 1, '', 1, - 1, - 1, $conf->currency).'</td></tr>';
+	if (($mysoc->localtax1_assuj == "1" && $mysoc->useLocalTax(1)) || $object->total_localtax1 != 0) {
+		print '<tr>';
+		print '<td class="titlefieldmiddle">' . $langs->transcountry("AmountLT1", $mysoc->country_code) . '</td>';
+		print '<td class="nowrap amountcard right">' . price($sign * $object->total_localtax1, 0, $langs, 0, -1, -1, $conf->currency) . '</td>';
+		if (isModEnabled("multicurrency") && ($object->multicurrency_code && $object->multicurrency_code != $conf->currency)) {
+			$object->multicurrency_total_localtax1 = (float) price2num($object->total_localtax1 * $object->multicurrency_tx, 'MT');
+
+			print '<td class="nowrap amountcard right">' . price($sign * $object->multicurrency_total_localtax1, 0, $langs, 0, -1, -1, $object->multicurrency_code) . '</td>';
+		}
+		print '</tr>';
 	}
-	if (($mysoc->localtax2_assuj == "1" && $mysoc->useLocalTax(2)) || $object->total_localtax2 != 0) { 	// Localtax2
-		print '<tr><td>'.$langs->transcountry("AmountLT2", $mysoc->country_code).'</td>';
-		print '<td class=nowrap right">'.price($object->total_localtax2, 1, '', 1, - 1, - 1, $conf->currency).'</td></tr>';
+
+	if (($mysoc->localtax2_assuj == "1" && $mysoc->useLocalTax(2)) || $object->total_localtax2 != 0) {
+		print '<tr>';
+		print '<td>' . $langs->transcountry("AmountLT2", $mysoc->country_code) . '</td>';
+		print '<td class="nowrap amountcard right">' . price($sign * $object->total_localtax2, 0, $langs, 0, -1, -1, $conf->currency) . '</td>';
+		if (isModEnabled("multicurrency") && ($object->multicurrency_code && $object->multicurrency_code != $conf->currency)) {
+			$object->multicurrency_total_localtax2 = (float) price2num($object->total_localtax2 * $object->multicurrency_tx, 'MT');
+
+			print '<td class="nowrap amountcard right">' . price($sign * $object->multicurrency_total_localtax2, 0, $langs, 0, -1, -1, $object->multicurrency_code) . '</td>';
+		}
+		print '</tr>';
 	}
 
 	// Revenue stamp
@@ -684,8 +701,16 @@ if ($object->id > 0) {
 		print '</td></tr>';
 	}
 
-	// Total with tax
-	print '<tr><td>'.$langs->trans('AmountTTC').'</td><td class="nowrap right">'.price($object->total_ttc, 1, '', 1, - 1, - 1, $conf->currency).'</td></tr>';
+	print '<tr>';
+	// Amount TTC
+	print '<td>' . $langs->trans('AmountTTC') . '</td>';
+	print '<td class="nowrap amountcard right">' . price($sign * $object->total_ttc, 0, $langs, 0, -1, -1, $conf->currency) . '</td>';
+	if (isModEnabled("multicurrency") && ($object->multicurrency_code && $object->multicurrency_code != $conf->currency)) {
+		// Multicurrency Amount TTC
+		print '<td class="nowrap amountcard right">' . price($sign * $object->multicurrency_total_ttc, 0, $langs, 0, -1, -1, $object->multicurrency_code) . '</td>';
+	}
+	print '</tr>';
+
 
 	$resteapayer = price2num($object->total_ttc - $totalpaid - $totalcreditnotes - $totaldeposits, 'MT');
 
@@ -700,7 +725,11 @@ if ($object->id > 0) {
 	}
 
 	// TODO Replace this by an include with same code to show already done payment visible in invoice card
-	print '<tr><td>'.$langs->trans('RemainderToPay').'</td><td class="nowrap right">'.price($resteapayer, 1, '', 1, - 1, - 1, $conf->currency).'</td></tr>';
+	print '<tr><td>'.$langs->trans('RemainderToPay').'</td><td class="nowrap right">'.price($resteapayer, 1, '', 1, - 1, - 1, $conf->currency).'</td>';
+	if (isModEnabled("multicurrency") && ($object->multicurrency_code && $object->multicurrency_code != $conf->currency)) {
+		print '<td></td>';
+	}
+	print '</tr>';
 
 	print '</table>';
 
