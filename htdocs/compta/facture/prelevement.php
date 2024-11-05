@@ -755,23 +755,24 @@ if ($object->id > 0) {
 			if ($user_perms) {
 				$remaintopaylesspendingdebit = $resteapayer - $pending;
 
-				print("</div>");
-
 				$title = $langs->trans("NewStandingOrder");
 				if ($type == 'bank-transfer') {
 					$title = $langs->trans("NewPaymentByBankTransfer");
 				}
 
-				print load_fiche_titre($title);
-				print dol_get_fiche_head();
-				print '<table class="border centpercent tableforfield">';
-				print '<form method="POST" action="">';
+				print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
 				print '<input type="hidden" name="token" value="'.newToken().'" />';
 				print '<input type="hidden" name="id" value="'.$object->id.'" />';
 				print '<input type="hidden" name="type" value="'.$type.'" />';
 				print '<input type="hidden" name="action" value="new" />';
-				print '<tr><td class="titlefield">'.$langs->trans('CustomerIBAN').'</td>';
-				print '<td class="nowraponall">';
+
+				print '<div class="center formconsumeproduce">';
+
+				//print '<table class="">';
+				//print '<tr><td class="left">'.
+				print $langs->trans('CustomerIBAN').' ';
+				//print '</td>';
+				//print '<td class="left nowraponall">';
 
 				$ribList = $object->thirdparty->get_all_rib();
 				$ribForSelection = [];
@@ -796,22 +797,23 @@ if ($object->id > 0) {
 						print img_warning($langs->trans("NoDefaultIBANFound"));
 				}
 
-				print '</td></tr>';
+				//print '</td></tr>';
 
 				// Bank Transfer Amount
-				print '<tr><td class="nowrap">';
-				print '<table width="100%" class="nobordernopadding"><tr><td class="nowrap">';
-				print '<label for="withdraw_request_amount">'.$langs->trans('BankTransferAmount').' </label>';
-				print '</td></tr></table>';
-				print '</td><td colspan="3">';
-				print '<input type="text" id="withdraw_request_amount" name="withdraw_request_amount" value="'.$remaintopaylesspendingdebit.'" size="9" />';
-				print '</td>';
-				print '</table>';
-				print '</div>';
+				//print '<tr><td class="nowrap left">';
+				print ' &nbsp; &nbsp; <label for="withdraw_request_amount">'.$langs->trans('BankTransferAmount').'</label>';
+				//print '</td><td class="left">';
+				print '<input type="text" class="right width75" id="withdraw_request_amount" name="withdraw_request_amount" value="'.$remaintopaylesspendingdebit.'">';
+				//print '</td></tr>';
+
+				//print '</table>';
 
 				// Button
-				print '<input type="submit" class="butAction" value="'.$buttonlabel.'" />';
 				print '<br><br>';
+				print '<input type="submit" class="butAction small" value="'.$buttonlabel.'" />';
+				print '<br><br>';
+
+				print '</div>';
 
 				print '</form>';
 
@@ -828,10 +830,9 @@ if ($object->id > 0) {
 					print '<input type="hidden" name="paymenservice" value="stripesepa" />';
 					print '<label for="withdraw_request_amount">'.$langs->trans('BankTransferAmount').' </label>';
 					print '<input type="text" id="withdraw_request_amount" name="withdraw_request_amount" value="'.$remaintopaylesspendingdebit.'" size="9" />';
-					print '<input type="submit" class="butAction" value="'.$buttonlabel.'" />';
+					print '<input type="submit" class="butAction small" value="'.$buttonlabel.'" />';
 					print '</form>';
 				}
-				print '<div class="fichecenter">';
 			} else {
 				print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$buttonlabel.'</a>';
 			}
@@ -859,14 +860,14 @@ if ($object->id > 0) {
 			print ' '.$langs->trans("DoStandingOrdersBeforePayments2");
 		}
 		print ' '.$langs->trans("DoStandingOrdersBeforePayments3");
-		print '</div><br>';
+		print '</div><br><br>';
 	} else {
 		print '<div class="opacitymedium justify">'.$langs->trans("DoStandingOrdersBeforePayments");
 		if (isModEnabled('stripe') && getDolGlobalString('STRIPE_SEPA_DIRECT_DEBIT')) {
 			print ' '.$langs->trans("DoStandingOrdersBeforePayments2");
 		}
 		print ' '.$langs->trans("DoStandingOrdersBeforePayments3");
-		print '</div><br>';
+		print '</div><br><br>';
 	}
 
 	/*
@@ -887,9 +888,9 @@ if ($object->id > 0) {
 	print '<td class="center">'.$langs->trans("DateProcess").'</td>';
 	print '<td class="center">'.$langs->trans("CustomerIBAN").'</td>';
 	if ($type == 'bank-transfer') {
-		print '<td class="center">'.$langs->trans("BankTransferReceipt").'</td>';
+		print '<td class="">'.$langs->trans("BankTransferReceipt").'</td>';
 	} else {
-		print '<td class="center">'.$langs->trans("WithdrawalReceipt").'</td>';
+		print '<td class="">'.$langs->trans("WithdrawalReceipt").'</td>';
 	}
 	print '<td>&nbsp;</td>';
 	// Action column
@@ -963,7 +964,13 @@ if ($object->id > 0) {
 			print '<td class="center"><span class="opacitymedium">'.$langs->trans("OrderWaiting").'</span></td>';
 
 			// Iban
-			print '<td class="center"><span class="iban">' . $obj->iban." / ".$obj->bic . '</span></td>';
+			print '<td class="center"><span class="iban">';
+			print $obj->iban;
+			if ($obj->iban && $obj->bic) {
+				print " / ";
+			}
+			print $obj->bic;
+			print '</span></td>';
 
 			// Link to make payment now
 			print '<td class="minwidth75">';
