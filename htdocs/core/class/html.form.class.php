@@ -11243,31 +11243,34 @@ class Form
 
 		// Adding the div for search assistance
 		$ret .= '<div class="search-component-assistance">';
+		$ret .= '<div>';
 
-		$ret .= '<table><tbody>';
-
-		$ret .= '<p class="assistance-title">' . img_picto('', 'help') . ' ' . $langs->trans('FilterAssistance') . ' </p>';
+		$ret .= '<p class="assistance-title">' . img_picto('', 'filter') . ' ' . $langs->trans('FilterAssistance') . ' </p>';
 
 		$ret .= '<p class="assistance-errors error" style="display:none">' . $langs->trans('AllFieldsRequired') . ' </p>';
 
-		$ret .= '<tr><td>';
-		$ret .= $form->selectarray('search_filter_field', $arrayoffilterfieldslabel, '', $langs->trans("Fields"), 0, 0, '', 0, 0, 0, '', 'maxwidth250', 1);
-		$ret .= '</td>';
+		$ret .= '<div class="inline-block">';
+		$ret .= $form->selectarray('search_filter_field', $arrayoffilterfieldslabel, '', $langs->trans("Fields"), 0, 0, '', 0, 0, 0, '', 'width250', 1);
+		$ret .= '</div>';
 
-		$ret .= '<td><span class="separator"></span>';
+		$ret .= '<span class="separator"></span>';
+
 		// Operator selector (will be populated dynamically)
-		$ret .= '<select class="operator-selector" id="operator-selector"">';
+		$ret .= '<div class="inline-block">';
+		$ret .= '<select class="operator-selector width150" id="operator-selector"">';
 		$ret .= '</select>';
 		$ret .= '<script>$(document).ready(function() {';
 		$ret .= '   $(".operator-selector").select2({';
-		$ret .= '       placeholder: "' . $langs->trans('Operator') . '"';
+		$ret .= '       placeholder: \'' . dol_escape_js($langs->trans('Operator')) . '\'';
 		$ret .= '   });';
 		$ret .= '});</script>';
-		$ret .= '</td>';
+		$ret .= '</div>';
 
-		$ret .= '<td><span class="separator"></span>';
+		$ret .= '<span class="separator"></span>';
+
+		$ret .= '<div class="inline-block">';
 		// Input field for entering values
-		$ret .= '<input type="text" class="flat width100 value-input" placeholder="' . $langs->trans('Value') . '">';
+		$ret .= '<input type="text" class="flat width100 value-input" placeholder="' . dolPrintHTML($langs->trans('Value')) . '">';
 
 		// Date selector
 		$dateOne = '';
@@ -11275,14 +11278,14 @@ class Form
 		$ret .=  $form->selectDate(($dateOne ? $dateOne : -1), 'dateone', 0, 0, 1, '', 1, 0, 0, '', '', '', '', 1, '');
 		$ret .= '</span>';
 
-		$ret .= '<span class="end-separator"></span> </td>';
+		$ret .= '</div>';
 
-		$ret .= '<td>';
+		$ret .= '<div class="inline-block">';
 		$ret .= '<button class="button buttongen button-save small add-filter-btn" type="button">' . $langs->trans("addToFilter") . '</button>';
-		$ret .= '</td>';
+		$ret .= '</div>';
 
-		$ret .= '</tr>';
-		$ret .= '</tbody></table>';
+		$ret .= '</div>';
+		//$ret .= '</tbody></table>';
 
 		// End of the assistance div
 		$ret .= '</div>';

@@ -177,19 +177,19 @@ $total_ttc = 0;
 
 // Affiche en-tete de rapport
 if ($modecompta == "CREANCES-DETTES") {
-	$name = $langs->trans("ReportInOut").', '.$langs->trans("ByProject");
+	$name = $langs->trans("ReportInOut").', '.$langs->trans("ByProjects");
 	$period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0).' - '.$form->selectDate($date_end, 'date_end', 0, 0, 0, '', 1, 0);
 	$periodlink = ($year_start ? "<a href='".$_SERVER["PHP_SELF"]."?year=".($tmps['year'] - 1)."&modecompta=".$modecompta."'>".img_previous()."</a> <a href='".$_SERVER["PHP_SELF"]."?year=".($tmps['year'] + 1)."&modecompta=".$modecompta."'>".img_next()."</a>" : "");
 	$builddate = dol_now();
 	//$exportlink=$langs->trans("NotYetAvailable");
 } elseif ($modecompta == "RECETTES-DEPENSES") {
-	$name = $langs->trans("ReportInOut").', '.$langs->trans("ByProject");
+	$name = $langs->trans("ReportInOut").', '.$langs->trans("ByProjects");
 	$period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0).' - '.$form->selectDate($date_end, 'date_end', 0, 0, 0, '', 1, 0);
 	$periodlink = ($year_start ? "<a href='".$_SERVER["PHP_SELF"]."?year=".($tmps['year'] - 1)."&modecompta=".$modecompta."'>".img_previous()."</a> <a href='".$_SERVER["PHP_SELF"]."?year=".($tmps['year'] + 1)."&modecompta=".$modecompta."'>".img_next()."</a>" : "");
 	$builddate = dol_now();
 	//$exportlink=$langs->trans("NotYetAvailable");
 } elseif ($modecompta == "BOOKKEEPING") {
-	$name = $langs->trans("ReportInOut").', '.$langs->trans("ByProject");
+	$name = $langs->trans("ReportInOut").', '.$langs->trans("ByProjects");
 	$period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0).' - '.$form->selectDate($date_end, 'date_end', 0, 0, 0, '', 1, 0);
 	$arraylist = array('no'=>$langs->trans("CustomerCode"), 'yes'=>$langs->trans("AccountWithNonZeroValues"), 'all'=>$langs->trans("All"));
 	$period .= ' &nbsp; &nbsp; <span class="opacitymedium">'.$langs->trans("DetailBy").'</span> '.$form->selectarray('showaccountdetail', $arraylist, $showaccountdetail, 0);
@@ -249,7 +249,7 @@ print '<table class="liste noborder centpercent">';
 print '<tr class="liste_titre">';
 
 if ($modecompta == 'BOOKKEEPING') {
-	print_liste_field_titre("ByProject", $_SERVER["PHP_SELF"], 'f.thirdparty_code,f.rowid', '', $param, '', $sortfield, $sortorder, 'width200 ');
+	print_liste_field_titre("ByProjects", $_SERVER["PHP_SELF"], 'f.thirdparty_code,f.rowid', '', $param, '', $sortfield, $sortorder, 'width200 ');
 } else {
 	print_liste_field_titre("", $_SERVER["PHP_SELF"], '', '', $param, '', $sortfield, $sortorder, 'width200 ');
 }
