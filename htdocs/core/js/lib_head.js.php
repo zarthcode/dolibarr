@@ -1106,7 +1106,6 @@ function getParameterByName(name, valueifnotfound)
  * Get the list of operators for a given field type
  */
 function getOperatorsForFieldType(type) {
-
 	// Define the list of operators for each general field category
 	const operatorList = {
 		text: {
@@ -1141,6 +1140,8 @@ function getOperatorsForFieldType(type) {
 
 	// Determine the general category for the given type using regex
 	let generalType = "";
+
+	console.log('Get list of operators for type='+type);
 
 	if (/^(varchar|char|text|blob|nchar|mediumtext|longtext)\(\d+\)$/i.test(type) || /^(varchar)$/i.test(type)) {
 		generalType = "text";
