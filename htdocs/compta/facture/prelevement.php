@@ -886,7 +886,7 @@ if ($object->id > 0) {
 	print '<td>'.$langs->trans("User").'</td>';
 	print '<td class="center">'.$langs->trans("Amount").'</td>';
 	print '<td class="center">'.$langs->trans("DateProcess").'</td>';
-	print '<td class="center">'.$langs->trans("CustomerIBAN").'</td>';
+	print '<td class="center">'.$langs->trans("IBAN").'</td>';
 	if ($type == 'bank-transfer') {
 		print '<td class="">'.$langs->trans("BankTransferReceipt").'</td>';
 	} else {
@@ -1091,10 +1091,16 @@ if ($object->id > 0) {
 			print '<td class="center nowraponall">'.dol_print_date($db->jdate($obj->date_traite), 'dayhour', 'tzuserrel')."</td>\n";
 
 			// Iban
-			print '<td class="center"><span class="iban">' . $obj->iban." / ".$obj->bic . '</span></td>';
+			print '<td class="center"><span class="iban">';
+			print $obj->iban;
+			if ($obj->iban && $obj->bic) {
+				print " / ";
+			}
+			print $obj->bic;
+			print '</span></td>';
 
 			// Link to payment request done
-			print '<td class="center minwidth75">';
+			print '<td class="minwidth75">';
 			if ($obj->fk_prelevement_bons > 0) {
 				$withdrawreceipt = new BonPrelevement($db);
 				$withdrawreceipt->id = $obj->fk_prelevement_bons;
