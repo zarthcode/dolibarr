@@ -354,12 +354,12 @@ abstract class CommonObjectLine extends CommonObject
 		$parent_element_properties = getElementProperties($this->parent_element);
 		$parent_classname = $parent_element_properties['classname'];
 		$parent_element = new $parent_classname($this->db);
+		/** @var CommonObject $parent_element */
+		$parentattribute = $this->fk_parent_attribute;
 		if ($parentattribute && method_exists($parent_element, 'fetch')) {
-			// @phan-suppress-next-line PhanPluginUnknownObjectMethodCall
-			$parent_element->fetch($this->$parentattribute);	/* @phpstan-ignore-line */
+			$parent_element->fetch($this->$parentattribute); // @phan-suppress-current-line PhanPluginUnknownObjectMethodCall
 		}
 
-		// @phan-suppress-next-line PhanPluginUnknownObjectMethodCall
-		return $parent_element->getNomUrl($withpicto).' - Line #'.$this->id;	/* @phpstan-ignore-line */
+		return $parent_element->getNomUrl($withpicto).' - Line #'.$this->id; // @phan-suppress-current-line PhanPluginUnknownObjectMethodCall
 	}
 }
