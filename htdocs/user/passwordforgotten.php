@@ -218,15 +218,6 @@ if (!$username) {
 	$focus_element = 'password';
 }
 
-// Send password button enabled ?
-$disabled = 'disabled';
-if (preg_match('/dolibarr/i', $mode)) {
-	$disabled = '';
-}
-if (getDolGlobalString('MAIN_SECURITY_ENABLE_SENDPASSWORD')) {
-	$disabled = ''; // To force button enabled
-}
-
 // Show logo (search in order: small company logo, large company logo, theme logo, common logo)
 $width = 0;
 $rowspan = 2;
@@ -240,6 +231,15 @@ if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output.'/log
 	$urllogo = DOL_URL_ROOT.'/theme/'.$conf->theme.'/img/dolibarr_logo.svg';
 } elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')) {
 	$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
+}
+
+// Send password button enabled ?
+$disabled = 'disabled';
+if (preg_match('/dolibarr/i', $mode)) {
+	$disabled = '';
+}
+if (getDolGlobalString('MAIN_SECURITY_ENABLE_SENDPASSWORD')) {
+	$disabled = ''; // To force button enabled
 }
 
 // Security graphical code

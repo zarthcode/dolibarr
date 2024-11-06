@@ -61,6 +61,13 @@ if (!empty($conf->dol_use_jmobile)) {
 	$conf->use_javascript_ajax = 1;
 }
 
+// $captcha is defined
+
+
+/*
+ * View
+ */
+
 $php_self = $_SERVER['PHP_SELF'];
 $php_self .= dol_escape_htmltag($_SERVER["QUERY_STRING"]) ? '?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]) : '';
 $php_self = str_replace('action=validatenewpassword', '', $php_self);
@@ -179,25 +186,9 @@ if (!empty($captcha)) {
 	}
 
 	if (is_object($captchaobj) && method_exists($captchaobj, 'getCaptchaCodeForForm')) {
-		// TODO: get this code using a method of captcha
+		print $captchaobj->getCaptchaCodeForForm($php_self);
 	} else {
-		?>
-	<!-- Captcha -->
-	<div class="trinputlogin">
-	<div class="tagtd tdinputlogin nowrap none valignmiddle">
-
-	<span class="fa fa-unlock"></span>
-	<span class="nofa inline-block">
-	<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="flat input-icon-security width125" type="text" maxlength="5" name="code" tabindex="3" autocomplete="off" />
-	</span>
-	<span class="nowrap inline-block">
-	<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
-	<a class="inline-block valignmiddle" href="<?php echo $php_self; ?>" tabindex="4"><?php echo img_picto($langs->trans("Refresh"), 'refresh', 'id="captcha_refresh_img"'); ?></a>
-	</span>
-
-	</div>
-	</div>
-		<?php
+		print 'Error, the captcha handler '.get_class($captchaobj).' does not have any method getCaptchaCodeForForm()';
 	}
 }
 

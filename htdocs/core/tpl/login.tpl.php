@@ -81,7 +81,6 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 @phan-var-force int<0,1> $forgetpasslink
 ';
 
-
 header('Cache-Control: Public, must-revalidate');
 
 if (GETPOST('dol_hide_topmenu')) {
@@ -104,6 +103,13 @@ if (GETPOST('dol_use_jmobile')) {
 if (!empty($conf->dol_use_jmobile)) {
 	$conf->use_javascript_ajax = 1;
 }
+
+// $captcha is defined
+
+
+/*
+ * View
+ */
 
 $php_self = empty($php_self) ? dol_escape_htmltag($_SERVER['PHP_SELF']) : $php_self;
 if (!empty($_SERVER["QUERY_STRING"]) && dol_escape_htmltag($_SERVER["QUERY_STRING"])) {
@@ -313,25 +319,9 @@ if (!empty($captcha)) {
 	}
 
 	if (is_object($captchaobj) && method_exists($captchaobj, 'getCaptchaCodeForForm')) {
-		// TODO: get this code using a method of captcha
+		print $captchaobj->getCaptchaCodeForForm($php_self);
 	} else {
-		?>
-	<!-- Captcha -->
-	<div class="trinputlogin">
-	<div class="tagtd none valignmiddle tdinputlogin nowrap">
-
-	<span class="fa fa-unlock"></span>
-	<span class="span-icon-security inline-block">
-	<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="flat input-icon-security width125" type="text" maxlength="5" name="code" tabindex="3" autocomplete="off" />
-	</span>
-	<span class="nowrap inline-block">
-	<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
-	<a class="inline-block valignmiddle" href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo img_picto($langs->trans("Refresh"), 'refresh', 'id="captcha_refresh_img"'); ?></a>
-	</span>
-
-	</div>
-	</div>
-		<?php
+		print 'Error, the captcha handler '.get_class($captchaobj).' does not have any method getCaptchaCodeForForm()';
 	}
 }
 
