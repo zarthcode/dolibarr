@@ -99,7 +99,7 @@ class modCaptchaStandard extends ModeleCaptcha
 	 * 	Return the HTML content to output on a form that need the captcha
 	 *
 	 *  @param		string	$php_self	An URL for the a href link
-	 *  @return     int					0 if KO, >0 if OK
+	 *  @return     string				The HTML code to output
 	 */
 	public function getCaptchaCodeForForm($php_self = '')
 	{

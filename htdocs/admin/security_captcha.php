@@ -91,11 +91,7 @@ print load_fiche_titre($langs->trans("SecuritySetup"), '', 'title_setup');
 print '<span class="opacitymedium">'.$langs->trans("CaptchaDesc")."</span><br>\n";
 print "<br>\n";
 
-$dirModCaptcha = array_merge(array('/core/modules/security/captcha'), is_array($conf->modules_parts['captcha']) ? $conf->modules_parts['captcha'] : array());
-foreach ($conf->modules_parts['captcha'] as $mo) {
-	//Add more models
-	$dirModCaptcha[] = $mo.'core/modules/security/captcha';
-}
+$dirModCaptcha = array_merge(array('/core/modules/security/captcha/'), is_array($conf->modules_parts['captcha']) ? $conf->modules_parts['captcha'] : array());
 
 // Load array with all captcha generation modules
 $arrayhandler = array();

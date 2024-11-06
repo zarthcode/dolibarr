@@ -174,21 +174,35 @@ if (!empty($captcha)) {
 		$php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog');
 	}
 
-	$classfile = DOL_DOCUMENT_ROOT."/core/modules/security/captcha/modCaptcha".ucfirst($captcha).'.class.php';
-	include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-	$captchaobj = null;
-	if (dol_is_file($classfile)) {
-		// Charging the numbering class
-		$classname = "modCaptcha".ucfirst($captcha);
-		require_once $classfile;
-
-		$captchaobj = new $classname($db, $conf, $langs, $user);
+	// List of directories where we can find captcha handlers
+	$dirModCaptcha = array_merge(array('main' => '/core/modules/security/captcha/'), is_array($conf->modules_parts['captcha']) ? $conf->modules_parts['captcha'] : array());
+	$fullpathclassfile = '';
+	foreach ($dirModCaptcha as $dir) {
+		$fullpathclassfile = dol_buildpath($dir."modCaptcha".ucfirst($captcha).'.class.php', 0, 2);
+		if ($fullpathclassfile) {
+			break;
+		}
 	}
 
-	if (is_object($captchaobj) && method_exists($captchaobj, 'getCaptchaCodeForForm')) {
-		print $captchaobj->getCaptchaCodeForForm($php_self);
+	if ($fullpathclassfile) {
+		include_once $fullpathclassfile;
+		$captchaobj = null;
+
+		// Charging the numbering class
+		$classname = "modCaptcha".ucfirst($captcha);
+		if (class_exists($classname)) {
+			$captchaobj = new $classname($db, $conf, $langs, $user);
+
+			if (is_object($captchaobj) && method_exists($captchaobj, 'getCaptchaCodeForForm')) {
+				print $captchaobj->getCaptchaCodeForForm();
+			} else {
+				print 'Error, the captcha handler '.get_class($captchaobj).' does not have any method getCaptchaCodeForForm()';
+			}
+		} else {
+			print 'Error, the captcha handler class '.$classname.' was not found after the include';
+		}
 	} else {
-		print 'Error, the captcha handler '.get_class($captchaobj).' does not have any method getCaptchaCodeForForm()';
+		print 'Error, the captcha handler '.$captcha.' has no class file found modCaptcha'.ucfirst($captcha);
 	}
 }
 
