@@ -42,6 +42,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/triggers/interface_20_all_Logevents.class.
 $action = GETPOST('action', 'aZ09');
 $confirm = GETPOST('confirm', 'alpha');
 $optioncss = GETPOST("optioncss", "aZ"); // Option for the css output (always '' except when 'print')
+$contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'listevents';
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "admin", "users", "other","withdrawals"));
@@ -223,7 +224,11 @@ $sql .= " e.fk_user, e.description, e.prefix_session,";
 $sql .= " u.login, u.admin, u.email, u.entity, u.firstname, u.lastname, u.gender, u.photo, u.statut as status";
 $sql .= " FROM ".MAIN_DB_PREFIX."events as e";
 $sql .= " LEFT JOIN ".MAIN_DB_PREFIX."user as u ON u.rowid = e.fk_user";
-$sql .= " WHERE e.entity IN (".($search_entity > 0 ? $search_entity : getEntity('event', (GETPOSTINT('search_current_entity') ? 0 : 1))).")";
+if ($search_entity > 0) {
+	$sql .= " WHERE e.entity = ".((int) $search_entity).")";
+} else {
+	$sql .= " WHERE e.entity IN (".getEntity('event', (GETPOSTINT('search_current_entity') ? 0 : 1)).")";
+}
 if ($date_start !== '') {
 	$sql .= " AND e.dateevent >= '".$db->idate($date_start)."'";
 }
