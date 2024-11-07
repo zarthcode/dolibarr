@@ -540,6 +540,9 @@ if ($result) {
 
 	if ($num == 0) {
 		$colspan = 8;
+		if (!empty($arrayfields['e.prefix_session']['checked'])) {
+			$colspan++;
+		}
 		if ($usefilter) {
 			print '<tr><td colspan="'.$colspan.'"><span class="opacitymedium">'.$langs->trans("NoEventFoundWithCriteria").'</span></td></tr>';
 		} else {
