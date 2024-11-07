@@ -18,9 +18,11 @@
  * Need to have the following variables defined:
  * $object (invoice, order, ...)
  * $action
+ * $db
  * $conf
  * $langs
  * $parameters
+ * $thirdpartytopropagateextrafieldsfrom
  */
 
 // Protection to avoid direct call of template
