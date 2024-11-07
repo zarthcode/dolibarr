@@ -38,7 +38,7 @@ class InterfaceLogevents extends DolibarrTriggers
 		'USER_LOGOUT' => 'UserLogoff',
 		'USER_CREATE' => 'NewUserCreated',
 		'USER_MODIFY' => 'EventUserModified',
-		'USER_NEW_PASSWORD' => 'NewUserPassword',
+		'USER_NEW_PASSWORD' => 'UserPasswordChange',
 		'USER_ENABLEDISABLE' => 'UserEnabledDisabled',
 		'USER_DELETE' => 'UserDeleted',
 		'USERGROUP_CREATE' => 'NewGroupCreated',
@@ -106,6 +106,8 @@ class InterfaceLogevents extends DolibarrTriggers
 
 		// Actions
 		dol_syslog("Trigger '" . $this->name . "' for action '$action' launched by " . __FILE__ . ". id=" . $object->id);
+
+		// Set the label of event from the action code and the object properties
 		$this->initEventData(InterfaceLogevents::EVENT_ACTION_DICT[$action], $object);
 
 		// Add entry in event table
