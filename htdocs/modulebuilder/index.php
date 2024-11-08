@@ -3634,7 +3634,7 @@ if ($module == 'initmodule') {
 					//var_dump($setuppage);
 					print '<tr><td>';
 					print '<span class="fa fa-file"></span> ';
-					if ($setuppage['relativename'] == 'about') {
+					if ($setuppage['relativename'] == 'about.php') {
 						print $langs->trans("AboutFile");
 					} else {
 						print $langs->trans("SetupFile");
@@ -5265,9 +5265,26 @@ if ($module == 'initmodule') {
 				print '</span>';
 				print '<br>';
 
+				// Links to editable files
 				print '<span class="fa fa-file"></span> '.$langs->trans("DescriptorFile").' : <strong class="wordbreak">'.$pathtofile.'</strong>';
 				print ' <a class="editfielda paddingleft paddingright" href="'.$_SERVER['PHP_SELF'].'?tab='.urlencode($tab).'&module='.$module.($forceddirread ? '@'.$dirread : '').'&action=editfile&token='.newToken().'&format=php&file='.urlencode($pathtofile).'&find=TOPMENU">'.img_picto($langs->trans("Edit"), 'edit').'</a>';
 				print '<br>';
+
+				// Search all files of modules mentioned by menu
+				$listODifferentUrlsInMenu = array();
+				foreach ($menus as $obj) {
+					if (preg_match('/^\/'.preg_quote(strtolower($module), '/').'\//', $obj['url'])) {
+						if (!empty($listODifferentUrlsInMenu[$pathoffile])) {	// Test to avoid to show same file twice.
+							continue;
+						}
+						$pathtofile = $obj['url'];
+						$listODifferentUrlsInMenu[$pathoffile] = $pathtofile;
+						print '<span class="fa fa-file"></span> '.$langs->trans("PageLinkedByAMenuEntry").' : <strong class="wordbreak">'.$pathtofile.'</strong>';
+						print ' <a class="editfielda paddingleft paddingright" href="'.$_SERVER['PHP_SELF'].'?tab='.urlencode($tab).'&module='.$module.($forceddirread ? '@'.$dirread : '').'&action=editfile&token='.newToken().'&format=php&file='.urlencode($pathtofile).'&find=TOPMENU">'.img_picto($langs->trans("Edit"), 'edit').'</a>';
+						print '<br>';
+					}
+				}
+
 
 				print '<br>';
 				print load_fiche_titre($langs->trans("ListOfMenusEntries"), '', '');
