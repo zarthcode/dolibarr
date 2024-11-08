@@ -373,7 +373,7 @@ print '<div class="fichecenter">';
 print load_fiche_titre($langs->trans("SubCats"), $newcardbutton, 'object_category');
 
 
-print '<table class="liste nohover centpercent borderbottom">';
+print '<table class="liste nohover noborder centpercent borderbottom">';
 
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("SubCats").'</td>';
