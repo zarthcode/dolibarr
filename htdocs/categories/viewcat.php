@@ -667,7 +667,7 @@ if ($type == Categorie::TYPE_CUSTOMER) {
 					print '<td class="right">';
 					if ($permission) {
 						print "<a href= '".$_SERVER['PHP_SELF']."?".(empty($socid) ? 'id' : 'socid')."=".$object->id."&type=".$typeid."&action=unlink&token=".newToken()."&removeelem=".$soc->id."'>";
-						print '<span class="hideonsmartphone">'.$langs->trans("DeleteFromCat").'</span>';
+						//print '<span class="hideonsmartphone">'.$langs->trans("DeleteFromCat").'</span>';
 						print img_picto($langs->trans("DeleteFromCat"), 'unlink', '', 0, 0, 0, '', 'paddingleft');
 						print "</a>";
 					}
