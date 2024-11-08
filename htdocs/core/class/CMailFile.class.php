@@ -1623,6 +1623,7 @@ class CMailFile
 		}
 		// Return-Path is important because it is used by SPF. Some MTA does not read Return-Path from header but from command line. See option MAIN_MAIL_ALLOW_SENDMAIL_F for that.
 		$out .= "Return-Path: ".$this->getValidAddress($this->addr_from, 0, 1).$this->eol2;
+		//$out .= "Return-Path: ".$this->getValidAddress($this->addr_from, 1, 1).$this->eol2;
 		if (isset($this->reply_to) && $this->reply_to) {
 			$out .= "Reply-To: ".$this->getValidAddress($this->reply_to, 2).$this->eol2;
 		}
@@ -1644,7 +1645,6 @@ class CMailFile
 		}
 
 		//$out.= "X-Priority: 3".$this->eol2;
-
 		$out .= 'Date: '.date("r").$this->eol2;
 
 		$trackid = $this->trackid;
@@ -2191,8 +2191,6 @@ class CMailFile
 	 */
 	public static function getValidAddress($address, $format, $encode = 0, $maxnumberofemail = 0)
 	{
-		global $conf;
-
 		$ret = '';
 
 		$arrayaddress = (!empty($address) ? explode(',', $address) : array());
@@ -2233,6 +2231,7 @@ class CMailFile
 						$newemail = '<'.$email.'>';
 					} else {
 						$newemail = ($format == 3 ? '"' : '').($encode ? self::encodetorfc2822($name) : $name).($format == 3 ? '"' : '').' <'.$email.'>';
+						//$newemail = (($format == 3 && !$encode) ? '"' : '').($encode ? self::encodetorfc2822($name) : $name).(($format == 3 && !$encode) ? '"' : '').' <'.$email.'>';
 					}
 				}
 
