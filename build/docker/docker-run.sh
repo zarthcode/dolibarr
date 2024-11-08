@@ -2,6 +2,14 @@
 # Script used by the Dockerfile.
 # See README.md to know how to create a Dolibarr env with docker
 
+if [ "${PHP_INI_DIR}" == "" ]; then
+	echo
+	echo This script must not be run directly. It is used by the Dockerfile
+	echo See README.md
+	echo
+	exit
+fi
+
 usermod -u "${HOST_USER_ID}" www-data
 groupmod -g "${HOST_GROUP_ID}" www-data
 
