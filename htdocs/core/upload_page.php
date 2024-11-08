@@ -91,7 +91,7 @@ if ($action == 'uploadfile') {	// Test on permission not required here. Done lat
 
 	$permissiontoadd = $user->hasRight($module, $permlevel1, 'read');
 	$upload_dir = $dir_temp.'/import';
-	var_dump($upload_dir);
+
 	include DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
 }
 
@@ -203,13 +203,18 @@ $max = $maxfilesizearray['max'];
 $maxmin = $maxfilesizearray['maxmin'];
 $maxphptoshow = $maxfilesizearray['maxphptoshow'];
 $maxphptoshowparam = $maxfilesizearray['maxphptoshowparam'];
+$out = '';
 if ($maxmin > 0) {
 	$out .= '<input type="hidden" name="MAX_FILE_SIZE" value="'.($maxmin * 1024).'">';	// MAX_FILE_SIZE must precede the field type=file
 }
 $out .= '<input class="hideobject" type="file" id="fileInput"';
+// @phpstan-ignore-next-line
 $out .= ((getDolGlobalString('MAIN_DISABLE_MULTIPLE_FILEUPLOAD') || $disablemulti) ? ' name="userfile"' : ' name="userfile[]" multiple');
+// @phpstan-ignore-next-line
 $out .= (!getDolGlobalString('MAIN_UPLOAD_DOC') || empty($perm) ? ' disabled' : '');
+// @phpstan-ignore-next-line
 $out .= (!empty($accept) ? ' accept="'.$accept.'"' : ' accept=""');
+// @phpstan-ignore-next-line
 $out .= (!empty($capture) ? ' capture="capture"' : '');
 $out .= '>';
 
