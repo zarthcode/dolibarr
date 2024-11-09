@@ -140,6 +140,9 @@ class modCaptchaStandard extends ModeleCaptcha
 
       		// Submit the form if found
       		if (form) {
+				console.log("we set actionlogin to value \"disabled\"");
+				document.getElementById("actionlogin").value = "disabled";
+
         		form.submit();
       		}
     	}
