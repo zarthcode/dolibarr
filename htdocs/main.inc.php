@@ -845,16 +845,60 @@ if (!defined('NOLOGIN')) {
 
 		// Verification security graphic code
 		if ($test && GETPOST('actionlogin', 'aZ09') == 'login' && GETPOST("username", "alpha", 2) && getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA') && !isset($_SESSION['dol_bypass_antispam'])) {
-			$sessionkey = 'dol_antispam_value';
-			$ok = (array_key_exists($sessionkey, $_SESSION) && (strtolower($_SESSION[$sessionkey]) === strtolower(GETPOST('code', 'restricthtml'))));
+			$ok = false;
 
-			// Check code
+			// Use the captcha handler to validate
+			require_once DOL_DOCUMENT_ROOT.'/core/lib/security2.lib.php';
+			$captcha = getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA_HANDLER', 'standard');
+
+			// List of directories where we can find captcha handlers
+			$dirModCaptcha = array_merge(array('main' => '/core/modules/security/captcha/'), is_array($conf->modules_parts['captcha']) ? $conf->modules_parts['captcha'] : array());
+			$fullpathclassfile = '';
+			foreach ($dirModCaptcha as $dir) {
+				$fullpathclassfile = dol_buildpath($dir."modCaptcha".ucfirst($captcha).'.class.php', 0, 2);
+				if ($fullpathclassfile) {
+					break;
+				}
+			}
+
+			// The file for captcha check has been found
+			if ($fullpathclassfile) {
+				include_once $fullpathclassfile;
+				$captchaobj = null;
+
+				// Charging the numbering class
+				$classname = "modCaptcha".ucfirst($captcha);
+				if (class_exists($classname)) {
+					/** @var ModeleCaptcha $captchaobj */
+					$captchaobj = new $classname($db, $conf, $langs, $user);
+					'@phan-var-force ModeleCaptcha $captchaobj';
+
+					if (is_object($captchaobj) && method_exists($captchaobj, 'validateCodeAfterLoginSubmit')) {
+						$ok = $captchaobj->validateCodeAfterLoginSubmit(); // @phan-suppress-current-line PhanUndeclaredMethod
+					} else {
+						$_SESSION["dol_loginmesg"] =  'Error, the captcha handler '.get_class($captchaobj).' does not have any method validateCodeAfterLoginSubmit()';
+						$test = false;
+						$error++;
+					}
+				} else {
+					$_SESSION["dol_loginmesg"] =  'Error, the captcha handler class '.$classname.' was not found after the include';
+					$test = false;
+					$error++;
+				}
+			} else {
+				$_SESSION["dol_loginmesg"] = 'Error, the captcha handler '.$captcha.' has no class file found modCaptcha'.ucfirst($captcha);
+				$test = false;
+				$error++;
+			}
+
+
+			// Process error of captcha validation
 			if (!$ok) {
 				dol_syslog('Bad value for code, connection refused', LOG_NOTICE);
 				// Load translation files required by page
 				$langs->loadLangs(array('main', 'errors'));
 
-				$_SESSION["dol_loginmesg"] = $langs->transnoentitiesnoconv("ErrorBadValueForCode");
+				$_SESSION["dol_loginmesg"] = (empty($_SESSION["dol_loginmesg"]) ? "" : $_SESSION["dol_loginmesg"]."<br>\n").$langs->transnoentitiesnoconv("ErrorBadValueForCode");
 				$test = false;
 
 				// Call trigger for the "security events" log
@@ -876,7 +920,7 @@ if (!defined('NOLOGIN')) {
 					$error++;
 				}
 
-				// Note: exit is done later
+				// Note: exit is done later ($test is false)
 			}
 		}
 
