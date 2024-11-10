@@ -1101,23 +1101,26 @@ class BonPrelevement extends CommonObject
 
 		$sqlTable = $type != 'bank-transfer' ? "facture" : "facture_fourn";
 
-		// Check if there is an iban associated to bank transfer or if we take the default
-		$sql = "SELECT fk_societe_rib";
-		$sql .= " FROM " . $this->db->prefix() . "prelevement_demande as pd";
-		$sql .= " LEFT JOIN " . $this->db->prefix() . $this->db->escape($sqlTable) . " as f ON f.rowid = pd.fk_".$this->db->escape($sqlTable);
-		$sql .= " WHERE f.entity IN (" . $this->db->escape($entity) . ')';
-
-		$resql = $this->db->query($sql);
-
-		if (!$resql) {
-			$this->error = $this->db->lasterror();
-			dol_syslog(__METHOD__ . " Read fk_societe_rib error " . $this->db->lasterror(), LOG_ERR);
-			return -1;
-		}
 		$thirdpartyBANId = 0;
-		if ($resql->num_rows) {
+
+		// Check if there is an iban associated to the bank transfer request or if we take the default
+		if ($did > 0) {
+			$sql = "SELECT pd.fk_societe_rib";
+			$sql .= " FROM " . $this->db->prefix() . "prelevement_demande as pd";
+			$sql .= " WHERE pd.rowid = ".((int) $did);
+
+			$resql = $this->db->query($sql);
+
+			if (!$resql) {
+				$this->error = $this->db->lasterror();
+				dol_syslog(__METHOD__ . " Read fk_societe_rib error " . $this->db->lasterror(), LOG_ERR);
+				return -1;
+			}
+
 			$obj = $this->db->fetch_object($resql);
-			$thirdpartyBANId = $obj->fk_societe_rib;
+			if ($obj) {
+				$thirdpartyBANId = $obj->fk_societe_rib;
+			}
 			$this->db->free($resql);
 		}
 
