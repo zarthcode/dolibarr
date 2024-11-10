@@ -1055,7 +1055,7 @@ class BonPrelevement extends CommonObject
 	 *	@param	int		$agence				dolibarr mysoc bank office (guichet)
 	 *	@param	string	$mode				real=do action, simu=test only
 	 *  @param	string	$format				FRST, RCUR or ALL
-	 *  @param  string  $executiondate		Date to execute the transfer
+	 *  @param  int  	$executiondate		Date to execute the transfer
 	 *  @param	int	    $notrigger			Disable triggers
 	 *  @param	string	$type				'direct-debit' or 'bank-transfer'
 	 *  @param	int		$did				ID of an existing payment request. If $did is defined, we use the existing payment request.
@@ -1063,7 +1063,7 @@ class BonPrelevement extends CommonObject
 	 *  @param	string	$sourcetype			'invoice' or 'salary'
 	 *	@return	int							Return integer <0 if KO, No of invoice included into file if OK
 	 */
-	public function create($banque = 0, $agence = 0, $mode = 'real', $format = 'ALL', $executiondate = '', $notrigger = 0, $type = 'direct-debit', $did = 0, $fk_bank_account = 0, $sourcetype = 'invoice')
+	public function create($banque = 0, $agence = 0, $mode = 'real', $format = 'ALL', $executiondate = 0, $notrigger = 0, $type = 'direct-debit', $did = 0, $fk_bank_account = 0, $sourcetype = 'invoice')
 	{
 		// phpcs:enable
 		global $conf, $langs, $user;
@@ -1144,7 +1144,7 @@ class BonPrelevement extends CommonObject
 			dol_syslog(__METHOD__ . " Read invoices for did=" . ((int) $did), LOG_DEBUG);
 
 			$sql = "SELECT f.rowid, pd.rowid as pfdrowid";
-			$sql .= ", f.".$this->db->escape($socOrUser);
+			$sql .= ", f.".$this->db->sanitize($socOrUser);
 			$sql .= ", pd.code_banque, pd.code_guichet, pd.number, pd.cle_rib";
 			$sql .= ", pd.amount";
 			if ($sourcetype != 'salary') {
@@ -1155,19 +1155,19 @@ class BonPrelevement extends CommonObject
 				$sql .= ", f.ref, sr.bic, sr.iban_prefix, 'FRST' as frstrecur";
 			}
 			$sql .= " FROM " . $this->db->prefix() . $sqlTable . " as f";
-			$sql .= " LEFT JOIN " . $this->db->prefix() . "prelevement_demande as pd ON f.rowid = pd.fk_".$this->db->escape($sqlTable);
-			$sql .= " LEFT JOIN " . $this->db->prefix() . $societeOrUser." as s ON s.rowid = f.".$this->db->escape($socOrUser);
-			$sql .= " LEFT JOIN " . $this->db->prefix() . $societeOrUser."_rib as sr ON s.rowid = sr.".$this->db->escape($socOrUser);
+			$sql .= " LEFT JOIN " . $this->db->prefix() . "prelevement_demande as pd ON f.rowid = pd.fk_".$this->db->sanitize($sqlTable);
+			$sql .= " LEFT JOIN " . $this->db->prefix() . $this->db->sanitize($societeOrUser)." as s ON s.rowid = f.".$this->db->sanitize($socOrUser);
+			$sql .= " LEFT JOIN " . $this->db->prefix() . $this->db->sanitize($societeOrUser."_rib")." as sr ON s.rowid = sr.".$this->db->sanitize($socOrUser);
 			if ($sourcetype != 'salary') {
 				if (!empty($societeRibID)) {
-					$sql .= " AND sr.rowid = " . intval($societeRibID);
+					$sql .= " AND sr.rowid = " . ((int) $societeRibID);
 				} else {
 					$sql .= " AND sr.default_rib = 1";
 				}
 				// TODO Add 'AND sr.default_rib = 1' in sourcetype salary too Note: the column has been created in v21 in llx_user_rib and default to 0
 				// If we add a test on sr.default_rib = 1, we must also check we have a correct error management to stop if no default BAN is found.
 			}
-			$sql .= " WHERE f.entity IN (" . $this->db->escape($entity) . ')';
+			$sql .= " WHERE f.entity IN (".((int) $entity).')';
 			if ($sourcetype != 'salary') {
 				$sql .= " AND f.fk_statut = 1"; // Invoice validated
 				$sql .= " AND f.paye = 0";
