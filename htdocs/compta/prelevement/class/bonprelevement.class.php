@@ -1120,7 +1120,10 @@ class BonPrelevement extends CommonObject
 			$obj = $this->db->fetch_object($resql);
 			if ($obj) {
 				$thirdpartyBANId = $obj->fk_societe_rib;
+
+				dol_syslog(__METHOD__ . " Found an BAN ID to use: ".$thirdpartyBANId);
 			}
+
 			$this->db->free($resql);
 		}
 
