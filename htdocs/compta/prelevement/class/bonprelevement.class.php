@@ -1114,10 +1114,10 @@ class BonPrelevement extends CommonObject
 			dol_syslog(__METHOD__ . " Read fk_societe_rib error " . $this->db->lasterror(), LOG_ERR);
 			return -1;
 		}
-		$societeRibID = 0;
+		$thirdpartyBANId = 0;
 		if ($resql->num_rows) {
 			$obj = $this->db->fetch_object($resql);
-			$societeRibID = $obj->fk_societe_rib;
+			$thirdpartyBANId = $obj->fk_societe_rib;
 			$this->db->free($resql);
 		}
 
@@ -1159,8 +1159,8 @@ class BonPrelevement extends CommonObject
 			$sql .= " LEFT JOIN " . $this->db->prefix() . $this->db->sanitize($societeOrUser)." as s ON s.rowid = f.".$this->db->sanitize($socOrUser);
 			$sql .= " LEFT JOIN " . $this->db->prefix() . $this->db->sanitize($societeOrUser."_rib")." as sr ON s.rowid = sr.".$this->db->sanitize($socOrUser);
 			if ($sourcetype != 'salary') {
-				if (!empty($societeRibID)) {
-					$sql .= " AND sr.rowid = " . ((int) $societeRibID);
+				if (!empty($thirdpartyBANId)) {
+					$sql .= " AND sr.rowid = " . ((int) $thirdpartyBANId);
 				} else {
 					$sql .= " AND sr.default_rib = 1";
 				}
@@ -1485,7 +1485,7 @@ class BonPrelevement extends CommonObject
 					if ($sourcetype == 'salary') {
 						$userid = $this->context['factures_prev'][0][2];
 					}
-					$result = $this->generate($format, $executiondate, $type, $fk_bank_account, $userid, $societeRibID);
+					$result = $this->generate($format, $executiondate, $type, $fk_bank_account, $userid, $thirdpartyBANId);
 					if ($result < 0) {
 						//var_dump($this->error);
 						//var_dump($this->invoice_in_error);
@@ -1795,10 +1795,10 @@ class BonPrelevement extends CommonObject
 	 * @param	string	$type				'direct-debit' or 'bank-transfer'
 	 * @param   int     $fk_bank_account	Bank account ID the receipt is generated for. Will use the ID into the setup of module Direct Debit or Credit Transfer if 0.
 	 * @param   int  	$forsalary          If the SEPA is to pay salaries
-	 * @param   string  $societeRibID		If defined, will use this ID to get the RIB. Otherwise, the default RIB will be taken.
+	 * @param   int  	$thirdpartyBANId	If defined, will use this ID to get the RIB. Otherwise, the first default BAN will be taken.
 	 * @return	int							>=0 if OK, <0 if KO
 	 */
-	public function generate(string $format = 'ALL', int $executiondate = 0, string $type = 'direct-debit', int $fk_bank_account = 0, int $forsalary = 0, string $societeRibID = '')
+	public function generate(string $format = 'ALL', int $executiondate = 0, string $type = 'direct-debit', int $fk_bank_account = 0, int $forsalary = 0, int $thirdpartyBANId = 0)
 	{
 		global $conf, $langs, $mysoc;
 
@@ -1869,8 +1869,8 @@ class BonPrelevement extends CommonObject
 				$sql .= " AND f.fk_soc = soc.rowid";
 				$sql .= " AND soc.fk_pays = c.rowid";
 				$sql .= " AND rib.fk_soc = f.fk_soc";
-				if (!empty($societeRibID)) {
-					$sql .= " AND rib.rowid = " . intval($societeRibID);
+				if (!empty($thirdpartyBANId)) {
+					$sql .= " AND rib.rowid = " . ((int) $thirdpartyBANId);
 				} else {
 					$sql .= " AND rib.default_rib = 1";
 				}
@@ -2012,8 +2012,8 @@ class BonPrelevement extends CommonObject
 					$sql .= " AND p.fk_facture_fourn = f.rowid";
 					$sql .= " AND f.fk_soc = soc.rowid";
 					$sql .= " AND rib.fk_soc = f.fk_soc";
-					if (!empty($societeRibID)) {
-						$sql .= " AND rib.rowid = " . intval($societeRibID);
+					if (!empty($thirdpartyBANId)) {
+						$sql .= " AND rib.rowid = " . ((int) $thirdpartyBANId);
 					} else {
 						$sql .= " AND rib.default_rib = 1";
 					}
