@@ -246,7 +246,7 @@ print '<table class="border tableforfield centpercent">';
 
 // Type
 $type = ($object->format == "A") ? 'classic' : 'date';
-print '<tr><td class="titlefieldmax45">'.$langs->trans("Type").'</td><td>';
+print '<tr><td class="titlefieldmiddle">'.$langs->trans("Type").'</td><td>';
 print img_picto('', dol_buildpath('/opensurvey/img/'.($type == 'classic' ? 'chart-32.png' : 'calendar-32.png'), 1), 'width="16"', 1);
 print ' '.$langs->trans($type == 'classic' ? "TypeClassic" : "TypeDate").'</td></tr>';
 
@@ -257,7 +257,7 @@ print $langs->trans("Title").'</td><td>';
 if ($action == 'edit') {
 	print '<input class="width300" type="text" name="nouveautitre" value="'.dolPrintHTML($object->title).'">';
 } else {
-	print dol_htmlentities($object->title);
+	print dolPrintHTML($object->title);
 }
 print '</td></tr>';
 
