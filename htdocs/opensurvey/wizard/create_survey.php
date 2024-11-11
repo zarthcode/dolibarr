@@ -66,6 +66,8 @@ $cochemail = '';
 
 // Jump to correct page
 if (!empty($creation_sondage_date) || !empty($creation_sondage_autre)) {
+	$error = 0;
+
 	$_SESSION["title"] = $title;
 	$_SESSION["description"] = $description;
 
@@ -88,19 +90,21 @@ if (!empty($creation_sondage_date) || !empty($creation_sondage_autre)) {
 	}
 
 	$testdate = false;
-	$champdatefin = dol_mktime(0, 0, 0, GETPOST('champdatefinmonth'), GETPOST('champdatefinday'), GETPOST('champdatefinyear'));
+	$champdatefin = dol_mktime(0, 0, 0, GETPOSTINT('champdatefinmonth'), GETPOSTINT('champdatefinday'), GETPOSTINT('champdatefinyear'));
 
-	if ($champdatefin && ($champdatefin > 0)) {	// A date was provided
+	if (! $error && $champdatefin && ($champdatefin > 0)) {	// A date was provided
+		$error++;
 		// Expire date is not before today
 		if ($champdatefin >= dol_now()) {
 			$testdate = true;
 			$_SESSION['champdatefin'] = dol_print_date($champdatefin, 'dayrfc');
 		} else {
+			$error++;
 			$testdate = true;
 			$_SESSION['champdatefin'] = dol_print_date($champdatefin, 'dayrfc');
 			//$testdate = false;
 			//$_SESSION['champdatefin'] = dol_print_date($champdatefin,'dayrfc');
-			setEventMessages('ExpireDate', null, 'warnings');
+			setEventMessages($langs->trans('ErrorDateMustBeInFuture'), null, 'errors');
 		}
 	}
 
@@ -108,7 +112,7 @@ if (!empty($creation_sondage_date) || !empty($creation_sondage_autre)) {
 		setEventMessages($langs->trans('ErrorFieldRequired', $langs->transnoentitiesnoconv("ExpireDate")), null, 'errors');
 	}
 
-	if ($title && $testdate) {
+	if (!$error && $title && $testdate) {
 		if (!empty($creation_sondage_date)) {
 			header("Location: choix_date.php");
 			exit();
