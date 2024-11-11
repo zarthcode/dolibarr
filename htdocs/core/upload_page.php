@@ -91,6 +91,10 @@ if ($action == 'uploadfile') {	// Test on permission not required here. Done lat
 
 	$permissiontoadd = $user->hasRight($module, $permlevel1, 'read');
 	$upload_dir = $dir_temp.'/import';
+	$forceFullTextIndexation = '1';
+
+	// Set $object so entry file will be linked to object.
+	// TODO
 
 	include DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
 }
