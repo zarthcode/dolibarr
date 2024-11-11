@@ -69,7 +69,7 @@ $modulepart = GETPOST('modulepart', 'aZ09');
  * Actions
  */
 
-if (!is_numeric(getDolGlobalString('MAIN_USE_TOP_MENU_IMPORT_FILE'))) {
+if (getDolGlobalString('MAIN_USE_TOP_MENU_IMPORT_FILE') && !is_numeric(getDolGlobalString('MAIN_USE_TOP_MENU_IMPORT_FILE'))) {
 	$urlforuploadpage = getDolGlobalString('MAIN_USE_TOP_MENU_IMPORT_FILE');
 
 	header("Location: ".$urlforuploadpage);
