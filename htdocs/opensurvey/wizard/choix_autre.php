@@ -124,7 +124,7 @@ if (empty($_SESSION['title'])) {
 //partie creation du sondage dans la base SQL
 //On prépare les données pour les inserer dans la base
 
-print '<form name="formulaire" action="#bas" method="POST">'."\n";
+print '<form name="formulaire" id="surveyform" action="'.$_SERVER["PHP_SELF"].'" method="POST">'."\n";
 print '<input type="hidden" name="token" value="'.newToken().'">';
 
 print load_fiche_titre($langs->trans("CreatePoll").' (2 / 2)');
@@ -143,6 +143,7 @@ for ($i = 0; $i < $_SESSION["nbrecases"]; $i++) {
 	}
 	print '<tr><td>'.$langs->trans("TitleChoice").' '.$j.': </td><td><input type="text" name="choix[]" size="40" maxlength="40" value="'.dol_escape_htmltag($_SESSION["choix$i"]).'" id="choix'.$i.'">';
 	$tmparray = array('checkbox' => $langs->trans("CheckBox"), 'yesno' => $langs->trans("YesNoList"), 'foragainst' => $langs->trans("PourContreList"));
+
 	print ' &nbsp; '.$langs->trans("Type").' '.$form->selectarray("typecolonne[]", $tmparray, $_SESSION["typecolonne$i"]);
 	print '</td></tr>'."\n";
 }
@@ -151,13 +152,30 @@ print '</table>'."\n";
 
 //ajout de cases supplementaires
 print '<table><tr>'."\n";
-print '<td>'.$langs->trans("5MoreChoices").'</td><td><input type="image" name="ajoutcases" src="../img/add-16.png"></td>'."\n";
+print '<td>'.$langs->trans("5MoreChoices").'</td><td>';
+if ($conf->use_javascript_ajax) {
+	print '<div id="addchoice">';
+	print img_picto('', 'add', '', 0, 0, 0, '', 'fa-2x valignmiddle btnTitle-icon');
+	print '</div>';
+} else {
+	print '<input type="image" name="ajoutcases" src="../img/add-16.png">';
+}
+print '</td>'."\n";
 print '</tr></table>'."\n";
 print'<br>'."\n";
 
 print '<table><tr>'."\n";
 print '<td></td><td><input type="submit" class="button" name="confirmecreation" value="'.dol_escape_htmltag($langs->trans("CreatePoll")).'"></td>'."\n";
 print '</tr></table>'."\n";
+
+print '<script>
+// jQuery code to handle the div click event
+$(document).ready(function() {
+	$("#addchoice").on("click", function() {
+		$("#surveyform").submit();
+	});
+});
+</script>';
 
 //fin du formulaire et bandeau de pied
 print '</form>'."\n";

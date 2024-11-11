@@ -255,7 +255,7 @@ print '<tr><td>';
 $adresseadmin = $object->mail_admin;
 print $langs->trans("Title").'</td><td>';
 if ($action == 'edit') {
-	print '<input type="text" name="nouveautitre" style="width: 95%" value="'.dol_escape_htmltag(dol_htmlentities($object->title)).'">';
+	print '<input class="width300" type="text" name="nouveautitre" value="'.dolPrintHTML($object->title).'">';
 } else {
 	print dol_htmlentities($object->title);
 }
